@@ -1,0 +1,10 @@
+App\DTO\EntityDTO\MediaDTO:
+    attributes:
+        uuid:
+            groups: ['read:media']
+        path:
+            groups: ['read:media', 'write:media']
+        metadata:
+            groups: ['read:media', 'write:media']
+        content:
+            groups: ['file:media', 'write:media']

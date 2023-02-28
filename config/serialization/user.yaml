@@ -1,0 +1,8 @@
+App\Doctrine\Entity\User:
+    attributes:
+        email:
+            groups: ['read:user', 'update:user', 'admin:read:user', 'admin:write:user']
+        roles:
+            groups: ['admin:read:user', 'admin:write:user']
+        password:
+            groups: ['update:user', 'admin:write:user']

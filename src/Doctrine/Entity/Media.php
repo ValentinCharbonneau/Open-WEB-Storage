@@ -3,28 +3,25 @@
 /**
  * @ Created on 10/02/2023 13:34
  * @ This file is part of the netagri-api project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
 
 namespace App\Doctrine\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
+use App\Doctrine\Entity\User;
 use Doctrine\DBAL\Types\Types;
+use App\DTO\EntityDTO\MediaDTO;
 use Doctrine\ORM\Mapping as ORM;
 use App\Doctrine\Repository\MediaRepository;
-use App\DTO\EntityDTO\MediaDTO;
-use Infrastructure\Doctrine\Entity\User\User;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 /**
  * Class Media.
  *
- * @author Valentin Charbonneau
+ * @author Valentin Charbonneau <valentincharbonneau@outlook.fr>
  */
 #[
     ORM\Entity(repositoryClass: MediaRepository::class),
@@ -36,7 +33,6 @@ class Media
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: Types::GUID, unique: true)]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[ApiProperty(identifier: true)]
     private ?string $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 344)]

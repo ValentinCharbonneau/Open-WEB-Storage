@@ -3,9 +3,8 @@
 /**
  * @ Created on 08/02/2023 9:20
  * @ This file is part of the NetagriWeb project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -19,7 +18,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * Class Encryptor.
  *
- * @author Valentin Charbonneau
+ * @author Valentin Charbonneau <valentincharbonneau@outlook.fr>
  */
 class Encryptor implements EncryptorInterface
 {
@@ -55,7 +54,7 @@ class Encryptor implements EncryptorInterface
         if (!file_exists($location) || $force) {
             file_put_contents($location, $fileContent);
         } else {
-            throw new FileException("Keys of user '". $this->user . "' already exists");
+            throw new FileException("Keys of user '" . $this->user . "' already exists");
         }
     }
 

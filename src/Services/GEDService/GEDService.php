@@ -3,9 +3,8 @@
 /**
  * @ Created on 21/02/2023 13:24
  * @ This file is part of the netagri-api project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -34,7 +33,7 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 /**
  * Class GEDService.
  *
- * @author Valentin Charbonneau
+ * @author Valentin Charbonneau <valentincharbonneau@outlook.fr>
  */
 class GEDService implements GEDServiceInterface
 {

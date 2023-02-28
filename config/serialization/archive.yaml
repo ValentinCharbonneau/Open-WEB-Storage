@@ -1,0 +1,10 @@
+App\DTO\EntityDTO\ArchiveDTO:
+    attributes:
+        uuid:
+            groups: ['read:archive']
+        path:
+            groups: ['read:archive']
+        metadata:
+            groups: ['read:archive']
+        content:
+            groups: ['file:archive']

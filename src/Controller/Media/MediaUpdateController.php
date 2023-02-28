@@ -3,9 +3,8 @@
 /**
  * @ Created on 20/02/2023 14:33
  * @ This file is part of the netagri-api project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -25,7 +24,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-#[Route('/%base_ged_version%/file/{uuid}', name: 'media_update', methods: ['PUT'])]
+#[Route('/file/{uuid}', name: 'media_update', methods: ['PUT'])]
 class MediaUpdateController extends AbstractController
 {
     public function __invoke(

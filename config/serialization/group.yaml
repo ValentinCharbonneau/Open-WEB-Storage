@@ -1,0 +1,6 @@
+App\DTO\EntityDTO\GroupDTO:
+    attributes:
+        uuid:
+            groups: ['read:group']
+        path:
+            groups: ['read:group', 'write:group']

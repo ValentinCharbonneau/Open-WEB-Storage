@@ -3,23 +3,22 @@
 /**
  * @ Created on 10/02/2023 11:00
  * @ This file is part of the netagri-api project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
 
 namespace App\Doctrine\EventListener;
 
-use Infrastructure\Doctrine\Entity\User\User;
+use App\Doctrine\Entity\User;
 use App\Services\Encryptor\EncryptorInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * Class RemoveGroupListener.
+ * Class NewUserListener.
  *
- * @author Valentin Charbonneau
+ * @author Valentin Charbonneau <valentincharbonneau@outlook.fr>
  */
 class NewUserListener
 {

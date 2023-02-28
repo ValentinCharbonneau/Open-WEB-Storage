@@ -3,9 +3,8 @@
 /**
  * @ Created on 20/02/2023 09:02
  * @ This file is part of the netagri-api project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -20,7 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-#[Route('/%base_ged_version%/dir/{uuid}', name: 'group_delete', methods: ['DELETE'])]
+#[Route('/dir/{uuid}', name: 'group_delete', methods: ['DELETE'])]
 class GroupDeleteController extends AbstractController
 {
     public function __invoke(

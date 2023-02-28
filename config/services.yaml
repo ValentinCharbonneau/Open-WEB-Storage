@@ -4,8 +4,12 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    ged_dir :       "%kernel.project_dir%/dir"
+    archive_dir :   "%ged_dir%/ARCHIVE"
+    doc_dir :       "%ged_dir%/DOCUMENT"
+    key_dir :       "%ged_dir%/KEY"
 
-    base_ged_version : ""
+    ged_pagination: 50
 
 services:
     # default configuration for services in *this* file
@@ -19,8 +23,15 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/Doctrine/Entity/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Doctrine\EventListener\NewUserListener:
+        tags:
+            -   
+                name: 'doctrine.orm.entity_listener'
+                event: 'postPersist'
+                entity: 'App\Doctrine\Entity\User'

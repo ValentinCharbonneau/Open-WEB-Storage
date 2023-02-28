@@ -3,9 +3,8 @@
 /**
  * @ Created on 10/02/2023 08:57
  * @ This file is part of the netagri-api project.
- * @ Contact (c) Omar Kennouche <topdeveloppement@gmail.com>
+ * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -25,7 +24,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 /**
  * Class FileNameValidator.
  *
- * @author Valentin Charbonneau
+ * @author Valentin Charbonneau <valentincharbonneau@outlook.fr>
  */
 class FileNameValidator extends ConstraintValidator
 {

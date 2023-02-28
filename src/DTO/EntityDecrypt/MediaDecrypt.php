@@ -4,7 +4,7 @@ namespace App\DTO\EntityDecrypt;
 
 use App\Doctrine\Entity\Group;
 use App\Validator as GEDValidator;
-use Infrastructure\Doctrine\Entity\User\User;
+use App\Doctrine\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[GEDValidator\FileName]

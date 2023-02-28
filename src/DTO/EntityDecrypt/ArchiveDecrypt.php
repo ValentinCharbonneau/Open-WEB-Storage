@@ -2,7 +2,7 @@
 
 namespace App\DTO\EntityDecrypt;
 
-use Infrastructure\Doctrine\Entity\User\User;
+use App\Doctrine\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ArchiveDecrypt
