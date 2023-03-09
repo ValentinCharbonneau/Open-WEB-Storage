@@ -13,6 +13,4 @@
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
-/dir/DOCUMENT/
-/dir/ARCHIVE/
-/dir/KEY/
+/dir/*
