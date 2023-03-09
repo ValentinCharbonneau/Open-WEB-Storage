@@ -48,7 +48,7 @@
                                                 {% include 'jsonBox.html.twig' with {json_data: endpointValue.input} %}
                                             </div>
                                             <div class="grid-item">
-                                                <h4>Output <span style="color: #008000;">{{endpointValue.output_code}}</span>{% if endpointValue.pagination %} <span style="float: right;">{{pagination}} entities per page {% endif %}</span></h4>
+                                                <h4>Output <span style="color: #008000;">{{endpointValue.output_code}}</span>{% if endpointValue.pagination %} <span style="float: right; max-width: 50%; text-align: right">{{pagination}} entities per page {% endif %}</span></h4>
                                                 {% include 'jsonBox.html.twig' with {json_data: endpointValue.output} %}
                                             </div>
                                         </div>
