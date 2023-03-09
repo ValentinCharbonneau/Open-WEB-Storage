@@ -1,0 +1,34 @@
+App\DTO\EntityDTO\ArchiveDTO:
+    admin: false
+
+    attributes:
+        uuid:
+            description: 'Unique identifier'
+            exemple: '1edb785f-c6a7-640c-96f8-fdd4464575ac'
+        path:
+            description: 'Path of archive before delete'
+            exemple: '/old/path/of/archive'
+        metadata:
+            description: 'Metadata of archive before delete'
+            exemple: '{"key": "value"}'
+        content:
+            description: 'Content of archive before delete, in base64'
+            exemple: 'JVBERi0xLjQKJfbk/N8KMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovVmV'
+
+    endpoints:
+        archive_read:
+            output_group: 'read:archive'
+            error_code: [401, 404]
+        archive_read_all:
+            multiple_entity: true
+            output_group: 'read:archive'
+            error_code: [401, 404]
+        archive_read_base64:
+            output_group: 'file:archive'
+            error_code: [401, 404]
+        archive_read_bin:
+            output_binary: true
+            error_code: [401, 404]
+        archive_delete:
+            output_code: 204
+            error_code: [401, 404]

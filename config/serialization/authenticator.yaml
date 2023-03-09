@@ -1,0 +1,10 @@
+App\DTO\Security\Authenticator:
+    attributes:
+        token:
+            groups: ['auth:jwt']
+        expire:
+            groups: ['auth:jwt']
+        email:
+            groups: ['auth:user']
+        password:
+            groups: ['auth:user']

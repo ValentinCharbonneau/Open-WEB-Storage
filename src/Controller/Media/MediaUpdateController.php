@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 20/02/2023 14:33
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -38,7 +38,7 @@ class MediaUpdateController extends AbstractController
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:media']);
             $media = $serializer->deserialize($requestStack->getCurrentRequest()->getContent(), MediaDTO::class, 'json');
             $media->uuid = $uuid;
-            return new JsonResponse($serializer->normalize($GEDService->updateMedia($media), 'json', $outputContext->toArray()));
+            return new JsonResponse($serializer->normalize($GEDService->updateMedia($media), 'json', $outputContext->toArray()), 201);
         } catch (ValidationFailedException $e) {
             return new JsonResponse([
                 "code" => 422,

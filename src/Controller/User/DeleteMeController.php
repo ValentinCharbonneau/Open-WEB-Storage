@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 28/02/2023 15:32
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -33,7 +33,7 @@ class DeleteMeController extends AbstractController
     ) {
     }
 
-    #[Route(name: 'delete-me', path: '/me', methods: ['DELETE'])]
+    #[Route(name: 'delete_me', path: '/me', methods: ['DELETE'])]
     public function __invoke(): JsonResponse
     {
         $user = $this->security->getUser();

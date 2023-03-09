@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 28/02/2023 10:00
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -40,7 +40,7 @@ class AuthenticatorLoginController extends AbstractController
     ) {
     }
 
-    #[Route(name: 'login-token', path: '/authenticator/jwt-auth', methods: ['POST'])]
+    #[Route(name: 'login_token', path: '/authenticator/jwt-auth', methods: ['POST'])]
     public function __invoke(): JsonResponse
     {
         $data = (array) json_decode($this->requestStack->getCurrentRequest()->getContent());

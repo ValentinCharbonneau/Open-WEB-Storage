@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 28/02/2023 10:00
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -70,6 +70,6 @@ class AuthenticatorRegisterController extends AbstractController
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('auth:jwt')->toArray();
 
-        return new JsonResponse($this->serializerInterface->normalize($authenticator, 'json', $contextBuilder));
+        return new JsonResponse($this->serializerInterface->normalize($authenticator, 'json', $contextBuilder), 201);
     }
 }

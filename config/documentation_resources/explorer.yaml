@@ -1,0 +1,10 @@
+Explorer:
+    entity: false
+    admin: false
+
+    endpoints:
+        explorer_explore:
+            output_group: 
+                App\DTO\EntityDTO\GroupDTO: 'read:group'
+                App\DTO\EntityDTO\MediaDTO: 'read:media'
+            error_code: [401, 404]

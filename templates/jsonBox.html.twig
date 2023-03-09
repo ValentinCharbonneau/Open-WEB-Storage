@@ -1,0 +1,37 @@
+<div class="json-box">
+    {% if json_data[0] is defined %}
+        [<br>
+        {% for entity, entityValue in json_data %}
+            &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+            {% for key, value in entityValue %}
+                {% if value is iterable %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"{{ key }}"</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        {% for child_key, child_value in value %}
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"{{ child_key }}"</span>: <span class="json-value">"{{ child_value }}"</span>{% if loop.index != value|length %},{% endif %}<br>
+                        {% endfor %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                {% else %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"{{ key }}"</span>: <span class="json-value">"{{ value }}"</span>{% if loop.index != entityValue|length %},{% endif %}<br>
+                {% endif %}
+            {% endfor %}
+            &nbsp;&nbsp;&nbsp;&nbsp;}{% if loop.index != json_data|length %},{% endif %}<br>
+        {% endfor %}
+        ]<br>
+    {% else %}
+        {<br>
+        {% for key, value in json_data %}
+            {% if value is iterable %}
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"{{ key }}"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                    {% for child_key, child_value in value %}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"{{ child_key }}"</span>: <span class="json-value">"{{ child_value }}"</span>{% if loop.index != value|length %},{% endif %}<br>
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            {% else %}
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"{{ key }}"</span>: <span class="json-value">"{{ value }}"</span>{% if loop.index != json_data|length %},{% endif %}<br>
+            {% endif %}
+        {% endfor %}
+        }<br>
+    {% endif %}
+</div>

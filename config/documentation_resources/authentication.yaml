@@ -1,0 +1,30 @@
+App\DTO\Security\Authenticator:
+    admin: false
+
+    attributes:
+        token:
+            description: 'Bearer token'
+            exemple: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Nzc5MzkyOTUsImV4cCI6MTY3Nzk2ODA5NSwidXNlcm5hbWUiOiJ0b3RvQG93cy5mciIsInJvbGVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXX0.VWB5mX4D_BTWBHXivGQgH_AeOrH2MuYr7hClntIEr1qIQ8L9oDjPwqyGvs0RE7Za7SJOKd6RUx3-mka-WXalZohaQTHYrfoN6abcEcU1UiUonKlarUlzkTHf8FNCjYOnRziww-azabfTMgNARMTtvjpc2hpr-IpDiIP2cs6m9tD-yRotLJ4o63D66ujau1zqD1ERrRIN_p_gjd98SVU_Yqg_tyWekrthKX_tulvVhBvnyyqa6wiZ9KbPdf7r2ycix4W1Vgv7DV4b_eYI4q4xgzhyh12zqp6F7U2cR3zmqH-3jPEqfyUH6IqkKO__0HPdA7RZQW7iR5_BFODipuSYpQ'
+        expire:
+            description: 'Expairation date of token'
+            exemple: '1677968095'
+        email:
+            description: 'Email of user'
+            exemple: 'toto@ows.fr'
+        password:
+            description: 'Password of user'
+            exemple: 'P@ss0rd_'
+
+    endpoints:
+        register:
+            input_group: 'auth:user'
+            output_group: 'auth:jwt'
+            output_code: 201
+            error_code: [422]
+        login_token:
+            input_group: 'auth:user'
+            output_group: 'auth:jwt'
+            error_code: [404]
+        refresh_token:
+            output_group: 'auth:jwt'
+            error_code: [401]

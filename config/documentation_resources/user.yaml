@@ -1,0 +1,35 @@
+App\Doctrine\Entity\User:
+    admin: true
+
+    attributes:
+        email:
+            description: 'Email (user identifier)'
+            exemple: 'toto@ows.fr'
+        roles:
+            description: 'Differents roles of user'
+            exemple: "['ROLE_USER']"
+        password:
+            description: 'Password'
+            exemple: 'P@ss0rd_'
+
+    endpoints:
+        admin_create_user:
+            input_group: 'admin:write:user'
+            output_group: 'admin:read:user'
+            output_code: 201
+            error_code: [401, 403, 404, 422]
+        admin_update_user:
+            input_group: 'admin:write:user'
+            output_group: 'admin:read:user'
+            output_code: 201
+            error_code: [401, 403, 404, 422]
+        admin_readone_user:
+            output_group: 'admin:read:user'
+            error_code: [401, 403, 404]
+        admin_readall_user:
+            multiple_entity: true
+            output_group: 'admin:read:user'
+            error_code: [401, 403, 404]
+        admin_delete_user:
+            output_code: 204
+            error_code: [401, 403, 404]

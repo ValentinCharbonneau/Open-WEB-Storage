@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 20/02/2023 09:02
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -38,7 +38,7 @@ class GroupUpdateController extends AbstractController
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:group']);
             $group = $serializer->deserialize($requestStack->getCurrentRequest()->getContent(), GroupDTO::class, 'json');
             $group->uuid = $uuid;
-            return new JsonResponse($serializer->normalize($GEDService->updateGroup($group), 'json', $outputContext->toArray()));
+            return new JsonResponse($serializer->normalize($GEDService->updateGroup($group), 'json', $outputContext->toArray()), 201);
         } catch (ValidationFailedException $e) {
             return new JsonResponse([
                 "code" => 422,

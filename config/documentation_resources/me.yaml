@@ -1,0 +1,23 @@
+App\Doctrine\Entity\User:
+    admin: false
+
+    attributes:
+        email:
+            description: 'Email (user identifier)'
+            exemple: 'toto@ows.fr'
+        password:
+            description: 'Password'
+            exemple: 'P@ss0rd_'
+
+    endpoints:
+        update_me:
+            input_group: 'update:user'
+            output_group: 'read:user'
+            output_code: 201
+            error_code: [401, 404, 422]
+        get_me:
+            output_group: 'read:user'
+            error_code: [401, 404]
+        delete_me:
+            output_code: 204
+            error_code: [401, 404]

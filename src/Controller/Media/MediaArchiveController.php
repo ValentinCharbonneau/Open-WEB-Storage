@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 20/02/2023 14:33
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -29,7 +29,7 @@ class MediaArchiveController extends AbstractController
     ) {
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:archive']);
-            return new JsonResponse($serializer->normalize($GEDService->archiveMedia($uuid), 'json', $outputContext->toArray()));
+            return new JsonResponse($serializer->normalize($GEDService->archiveMedia($uuid), 'json', $outputContext->toArray()), 201);
         } catch (ResourceNotFoundException $e) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }

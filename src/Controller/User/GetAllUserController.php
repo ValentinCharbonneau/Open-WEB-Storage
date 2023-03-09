@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 28/02/2023 13:46
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -45,7 +45,7 @@ class GetAllUserController extends AbstractController
     ) {
     }
 
-    #[Route(name: 'admin-readall-user', path: '/users', methods: ['GET'])]
+    #[Route(name: 'admin_readall_user', path: '/users', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         if (!in_array("ROLE_ADMIN", $this->security->getUser()->getRoles())) {

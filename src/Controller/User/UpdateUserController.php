@@ -2,7 +2,7 @@
 
 /**
  * @ Created on 28/02/2023 10:00
- * @ This file is part of the netagri-api project.
+ * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
@@ -43,7 +43,7 @@ class UpdateUserController extends AbstractController
     ) {
     }
 
-    #[Route(name: 'admin-update-user', path: '/users/{email}', methods: ['PUT'])]
+    #[Route(name: 'admin_update_user', path: '/users/{email}', methods: ['PUT'])]
     public function __invoke(string $email): JsonResponse
     {
         if (!in_array("ROLE_ADMIN", $this->security->getUser()->getRoles())) {
@@ -84,6 +84,6 @@ class UpdateUserController extends AbstractController
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('admin:read:user')->toArray();
 
-        return new JsonResponse($this->serializerInterface->normalize($user, 'json', $contextBuilder));
+        return new JsonResponse($this->serializerInterface->normalize($user, 'json', $contextBuilder), 201);
     }
 }

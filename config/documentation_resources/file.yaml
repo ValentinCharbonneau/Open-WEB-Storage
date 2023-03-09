@@ -1,0 +1,46 @@
+App\DTO\EntityDTO\MediaDTO:
+    admin: false
+
+    attributes:
+        uuid:
+            description: 'Unique identifier'
+            exemple: '1edb785f-c6a7-640c-96f8-fdd4464575ac'
+        path:
+            description: 'Path of file'
+            exemple: '/path/of/file'
+        metadata:
+            description: 'Metadata of file'
+            exemple: '{"key": "value"}'
+        content:
+            description: 'Content of file in base64'
+            exemple: 'JVBERi0xLjQKJfbk/N8KMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovVmV'
+
+    endpoints:
+        media_create:
+            input_group: 'write:media'
+            output_group: 'read:media'
+            output_code: 201
+            error_code: [401, 404, 422]
+        media_update:
+            input_group: 'write:media'
+            output_group: 'read:media'
+            output_code: 201
+            error_code: [401, 404, 422]
+        media_read:
+            output_group: 'read:media'
+            error_code: [401, 404]
+        media_read_all:
+            multiple_entity: true
+            output_group: 'read:media'
+            error_code: [401, 404]
+        media_read_base64:
+            output_group: 'file:media'
+            error_code: [401, 404]
+        media_read_bin:
+            output_binary: true
+            error_code: [401, 404]
+        media_archive:
+            output_entity: App\DTO\EntityDTO\ArchiveDTO
+            output_group: 'read:archive'
+            output_code: 201
+            error_code: [401, 404, 422]

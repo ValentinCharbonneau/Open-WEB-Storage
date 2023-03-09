@@ -1,0 +1,32 @@
+App\DTO\EntityDTO\GroupDTO:
+    admin: false
+
+    attributes:
+        uuid:
+            description: 'Unique identifier'
+            exemple: '1edb785f-c6a7-640c-96f8-fdd4464575ac'
+        path:
+            description: 'Path of folder'
+            exemple: '/path/of/folder'
+
+    endpoints:
+        group_create:
+            input_group: 'write:group'
+            output_group: 'read:group'
+            output_code: 201
+            error_code: [401, 404, 422]
+        group_update:
+            input_group: 'write:group'
+            output_group: 'read:group'
+            output_code: 201
+            error_code: [401, 404, 422]
+        group_read:
+            output_group: 'read:group'
+            error_code: [401, 404]
+        group_read_all:
+            multiple_entity: true
+            output_group: 'read:group'
+            error_code: [401, 404]
+        group_delete:
+            output_code: 204
+            error_code: [401, 404, 422]

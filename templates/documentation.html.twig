@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Open WEB Storage{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="/favicon.ico">
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="/style.css" />
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            <header>
+                <nav>
+                    <div class="navbar">
+                        <div class="navbar-brand">
+                            <p>Open WEB Storage</p>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            <div id="doc-content">
+                {% for key, value in api %}
+                    <div class="collapse">
+                        <div class="collapse-header">
+                            <h3 class="noselect">{{key}}</h3>
+                            <p class="arrow down noselect"></p>
+                        </div>
+                        <div class="collapse-content hide">
+                            {% if value.admin %}
+                                <div class="padlock" >
+                                    <img src="/padlock.webp" alt="Only administrator" style="height: 30px; vertical-align: sub;"><span style="font-weight: 600; font-size: 1.3em; margin-left: 5px;">Only administrator</span>
+                                </div>
+                            {% endif %}
+                            {% for endpointName, endpointValue in value.endpoints %}
+                                <div class="collapse">
+                                    <div class="collapse-header">
+                                        <h3 class="noselect"><span class="{{endpointValue.header_method|lower}}">{{endpointValue.header_method}}</span> : {{endpointValue.header_path}}</h3>
+                                        <p class="arrow down noselect"></p>
+                                    </div>
+                                    <div class="collapse-content hide">
+                                        <div class="grid-container">
+                                            <div class="grid-item">
+                                                <h4>Input</h4>
+                                                {% include 'jsonBox.html.twig' with {json_data: endpointValue.input} %}
+                                            </div>
+                                            <div class="grid-item">
+                                                <h4>Output <span style="color: #008000;">{{endpointValue.output_code}}</span>{% if endpointValue.pagination %} <span style="float: right;">{{pagination}} entities per page {% endif %}</span></h4>
+                                                {% include 'jsonBox.html.twig' with {json_data: endpointValue.output} %}
+                                            </div>
+                                        </div>
+                                        <div style="padding: 10px;">
+                                            <h4>Errors</h4>
+                                            <div class="json-box">
+                                                {% for code in endpointValue.error %}
+                                                    <span class="json-error">{{code}}</span>{% if loop.index != endpointValue.error|length %},{% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <script src="/script.js"></script>
+        {% endblock %}
+    </body>
+</html>
