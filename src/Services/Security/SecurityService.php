@@ -38,7 +38,7 @@ class SecurityService  implements SecurityServiceInterface
 
     public function setUser(User $user) : self
     {
-        if ($this->requestStack->getCurrentRequest()->isCli() || empty($this->user)) {
+        if (empty($this->requestStack->getCurrentRequest()) || empty($this->user)) {
             $this->user = $user;
         }
 
