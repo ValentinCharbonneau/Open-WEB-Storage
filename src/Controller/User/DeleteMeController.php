@@ -13,7 +13,7 @@ namespace App\Controller\User;
 
 use App\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +29,7 @@ class DeleteMeController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManagerInterface,
         private ParameterBagInterface $bag,
-        private Security $security
+        private SecurityServiceInterface $security
     ) {
     }
 

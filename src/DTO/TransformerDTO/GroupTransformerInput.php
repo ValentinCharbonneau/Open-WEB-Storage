@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace App\DTO\TransformerDTO;
 
 use App\DTO\EntityDecrypt\GroupDecrypt;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -23,7 +23,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class GroupTransformerInput
 {
     public function __construct(
-        private Security $security,
+        private SecurityServiceInterface $security,
         private SluggerInterface $slugger
     ) {
     }

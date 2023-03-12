@@ -13,7 +13,7 @@ namespace App\Controller\User;
 
 use App\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +31,7 @@ class DeleteUserController extends AbstractController
         private EntityManagerInterface $entityManagerInterface,
         private UserRepository $userRepository,
         private ParameterBagInterface $bag,
-        private Security $security
+        private SecurityServiceInterface $security
     ) {
     }
 

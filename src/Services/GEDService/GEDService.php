@@ -18,7 +18,7 @@ use App\DTO\EntityDTO\MediaDTO;
 use App\Doctrine\Entity\Archive;
 use App\DTO\EntityDTO\ArchiveDTO;
 use App\DTO\EntityDecrypt\ArchiveDecrypt;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\GroupRepository;
 use App\Doctrine\Repository\MediaRepository;
 use App\Services\Encryptor\EncryptorInterface;
@@ -45,7 +45,7 @@ class GEDService implements GEDServiceInterface
         private SerializerInterface $serializer,
         private EncryptorInterface $encryptor,
         private ParameterBagInterface $bag,
-        private Security $security,
+        private SecurityServiceInterface $security,
     ) {
         $this->encryptor->loadKeyPair($this->security->getUser()->getUuid());
     }
