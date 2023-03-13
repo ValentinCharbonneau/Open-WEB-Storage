@@ -7,7 +7,7 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\User;
 
@@ -47,7 +47,7 @@ class DeleteUserController extends AbstractController
         if (empty($user)) {
             return new JsonResponse(["code" => 404, "message" => "Not found user '$email'"], 404);
         }
-        
+
         unlink($this->bag->get("key_dir") . "/" . $user->getUuid() . ".key");
         rmdir($this->bag->get("doc_dir") . "/" . $user->getUuid());
         rmdir($this->bag->get("archive_dir") . "/" . $user->getUuid());
