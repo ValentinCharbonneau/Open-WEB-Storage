@@ -2,7 +2,7 @@
 Open WEB Storage is an open source project to store and encrypt your documents.
 
 ## Prerequisites
-- Designed for Debian 11 Bullseye and anothers distribution based on Debian
+- Designed for Debian 11 Bullseye and another distribution based on Debian
 - OpenSSL
 - MariaDB/MySQL, PostgreSQL, or SQLite database
 - Apache 2
@@ -127,7 +127,7 @@ php bin/console ows:build-tree
 ```
 
 ## Fixtures
-If you want to build fixtures and sample of datas and documents in project, you can use the following command :
+If you want to build fixtures and sample of data and documents in project, you can use the following command :
 ```
 php bin/console ows:build-fixtures
 ```
@@ -137,7 +137,7 @@ If you want to create an user, you can use the following command :
 ```
 php bin/console ows:create-user
 ```
-This command asks you if you want assign administrator role to new user.
+This command asks you if you want to assign administrator role to new user.
 
 ## Installation was finished !
 Now you can use the Open WEB Storage application. If you need more information, go to the root url of your recent installation of Open WEB Storage to consult the documentation.
