@@ -18,12 +18,12 @@ use App\DTO\EntityDTO\MediaDTO;
 use App\Doctrine\Entity\Archive;
 use App\DTO\EntityDTO\ArchiveDTO;
 use App\DTO\EntityDecrypt\ArchiveDecrypt;
-use Symfony\Bundle\SecurityBundle\Security;
 use App\Doctrine\Repository\GroupRepository;
 use App\Doctrine\Repository\MediaRepository;
 use App\Services\Encryptor\EncryptorInterface;
 use App\Doctrine\Repository\ArchiveRepository;
 use App\Services\FileSystem\FileSystemInterface;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
@@ -45,9 +45,11 @@ class GEDService implements GEDServiceInterface
         private SerializerInterface $serializer,
         private EncryptorInterface $encryptor,
         private ParameterBagInterface $bag,
-        private Security $security,
+        private SecurityServiceInterface $security,
     ) {
-        $this->encryptor->loadKeyPair($this->security->getUser()->getUuid());
+        if (!empty($this->security->getUser())) {
+            $this->encryptor->loadKeyPair($this->security->getUser()->getUuid());
+        }
     }
 
 

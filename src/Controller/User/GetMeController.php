@@ -7,12 +7,12 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\User;
 
 use App\Doctrine\Entity\User;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -29,7 +29,7 @@ class GetMeController extends AbstractController
 {
     public function __construct(
         private SerializerInterface $serializerInterface,
-        private Security $security
+        private SecurityServiceInterface $security
     ) {
     }
 

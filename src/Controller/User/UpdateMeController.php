@@ -7,14 +7,14 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\User;
 
 use App\Doctrine\Entity\User;
 use App\Doctrine\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +39,7 @@ class UpdateMeController extends AbstractController
         private RequestStack $requestStack,
         private UserPasswordHasherInterface $passwordHasher,
         private UserValidatorInterface $userValidatorInterface,
-        private Security $security
+        private SecurityServiceInterface $security
     ) {
     }
 

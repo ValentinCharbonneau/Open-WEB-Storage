@@ -7,13 +7,13 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\User;
 
 use App\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -40,7 +40,7 @@ class GetAllUserController extends AbstractController
         private RequestStack $requestStack,
         private UserPasswordHasherInterface $passwordHasher,
         private UserValidatorInterface $userValidatorInterface,
-        private Security $security,
+        private SecurityServiceInterface $security,
         private ParameterBagInterface $bag
     ) {
     }
@@ -65,10 +65,11 @@ class GetAllUserController extends AbstractController
             $page = 1;
         }
 
-        $users = $this->userRepository->findBy([],
-                        limit: $this->bag->get("ged_pagination"),
-                        offset: ($page - 1) * $this->bag->get("ged_pagination")
-                    );
+        $users = $this->userRepository->findBy(
+            [],
+            limit: $this->bag->get("ged_pagination"),
+            offset: ($page - 1) * $this->bag->get("ged_pagination")
+        );
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('admin:read:user')->toArray();
         foreach ($users as &$user) {

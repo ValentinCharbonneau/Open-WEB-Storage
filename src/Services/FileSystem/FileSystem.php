@@ -22,7 +22,7 @@ use App\DTO\EntityDecrypt\GroupDecrypt;
 use App\DTO\EntityDecrypt\MediaDecrypt;
 use Doctrine\ORM\EntityManagerInterface;
 use App\DTO\EntityDecrypt\ArchiveDecrypt;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\GroupRepository;
 use App\Doctrine\Repository\MediaRepository;
 use App\DTO\TransformerDTO\GroupTransformerInput;
@@ -64,7 +64,7 @@ class FileSystem implements FileSystemInterface
         private ParameterBagInterface $bag,
         private SluggerInterface $slugger,
         private Encryptor $encryptor,
-        private Security $security,
+        private SecurityServiceInterface $security,
     ) {
         $this->pathToPersist = null;
     }

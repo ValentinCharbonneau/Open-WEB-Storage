@@ -14,7 +14,7 @@ namespace App\Controller\Archive;
 use App\Doctrine\Entity\Archive;
 use App\Doctrine\Entity\Media;
 use App\Services\GEDService\GEDServiceInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Encryptor\EncryptorInterface;
 use Symfony\Component\Routing\Annotation\Route;

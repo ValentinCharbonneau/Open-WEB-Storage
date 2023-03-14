@@ -14,7 +14,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "2.8",
-            "ref": "719d615af3150a59a02acc97c285d689e5dcf43f"
+            "ref": "6b43b7b6ff6bf2551f2933ebeb66721fa3db8fbc"
         },
         "files": [
             "./config/packages/doctrine.yaml",
@@ -46,6 +46,15 @@
         "files": [
             "./config/packages/lexik_jwt_authentication.yaml"
         ]
+    },
+    "symfony/apache-pack": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "efb318193e48384eb5c5aadff15396ed698f8ffc"
+        }
     },
     "symfony/console": {
         "version": "6.2",

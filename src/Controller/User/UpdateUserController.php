@@ -7,13 +7,13 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\User;
 
 use App\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -37,7 +37,7 @@ class UpdateUserController extends AbstractController
         private UserRepository $userRepository,
         private SerializerInterface $serializerInterface,
         private RequestStack $requestStack,
-        private Security $security,
+        private SecurityServiceInterface $security,
         private UserPasswordHasherInterface $passwordHasher,
         private UserValidatorInterface $userValidatorInterface,
     ) {
