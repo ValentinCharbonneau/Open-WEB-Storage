@@ -9,6 +9,7 @@ Open WEB Storage is an open source project to store and encrypt your documents.
 - [PHP 8.1](https://github.com/ValentinCharbonneau/Open-WEB-Storage/tree/v1.0.0/readme/php81.md) and the following modules:
     - curl
     - xml
+    - gettext
     - intl
     - mbstring
     - pdo_mysql, pdo_pgsql, or pdo_sqlite depending on your database server
@@ -130,6 +131,20 @@ php bin/console ows:build-tree
 If you want to build fixtures and sample of data and documents in project, you can use the following command :
 ```
 php bin/console ows:build-fixtures
+```
+
+Three users are created :
+```
+email : admin@ows.com
+password : Admin_P@ss0rd
+```
+```
+email : toto@ows.com
+password : Toto_P@ss0rd
+```
+```
+email : tata@ows.com
+password : Tata_P@ss0rd
 ```
 
 ## Create an admin user
