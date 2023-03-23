@@ -13,11 +13,11 @@ namespace App\Validator;
 
 use App\Doctrine\Entity\Group;
 use App\Doctrine\Entity\Media;
-use App\Doctrine\Repository\GroupRepository;
-use App\Doctrine\Repository\MediaRepository;
 use App\DTO\EntityDecrypt\GroupDecrypt;
 use App\DTO\EntityDecrypt\MediaDecrypt;
 use Symfony\Component\Validator\Constraint;
+use App\Doctrine\Repository\GroupRepository;
+use App\Doctrine\Repository\MediaRepository;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 

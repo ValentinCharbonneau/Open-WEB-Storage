@@ -22,12 +22,6 @@ class GroupDecrypt
 
     public User $owner;
 
-    #[Assert\AtLeastOneOf([
-        new Assert\Json(),
-        new Assert\IsNull()
-    ])]
-    public ?string $metadata;
-
     public int $deep;
 
     public ?Group $parent;

@@ -11,7 +11,7 @@ class ArchiveDecrypt
         new Assert\Uuid(),
         new Assert\IsNull()
     ])]
-    public ?string $uuid;
+    public ?string $uuid = null;
 
     #[Assert\NotBlank]
     public string $path;

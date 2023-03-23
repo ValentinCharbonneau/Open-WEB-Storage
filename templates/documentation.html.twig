@@ -23,6 +23,19 @@
             </header>
 
             <div id="doc-content">
+                <div class="block">
+                    <h3 class="noselect">Explanation of token authentication</h3>
+                    <p>Authentication is done via a Bearer token.</p>
+                    <p>The endpoints <a>/authenticator/register</a>, 
+                    <a>/authenticator/jwt-auth</a> and 
+                    <a>/authenticator/jwt-refresh</a> deliver a token with a timelife of 8 hours.</p>
+                    <p style="margin-bottom: 1px;">For each request you must use a valid token in the HTTP request header with the key <a>Authorization</a>
+                     and the value <a>Bearer yourToken</a>.</p>
+                    <p style="margin-top: 1px;">Only the endpoints <a>/authenticator/register</a> and
+                     <a>/authenticator/jwt-auth</a> do not need authentication token.</p>
+                     <p>The endpoint"<a>/authenticator/jwt-refresh</a> gives a new token with a lifetime of 8 hours from a valid token in the HTTP request header as described above.
+                      This endpoint thus has vocation to give a new token starting from a token in end of life.</p>
+                </div>
                 {% for key, value in api %}
                     <div class="collapse">
                         <div class="collapse-header">

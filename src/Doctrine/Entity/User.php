@@ -37,6 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $uuid;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Length(max: 180, maxMessage: "Max length of name is 180 characters")]
     #[Assert\NotBlank(message: "Email is required")]
     #[Assert\Email(message: "Invalid format")]
     private string $email;
@@ -46,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank(message: "Password is required")]
     #[Assert\Length(min: 8, minMessage: "Your password must have a minimum length of 8 characters")]
-    #[Assert\Regex('/[\$\&\+\,\:\;\=\?\@\#\|\'\<\>\.\-\^\*\(\)\%\!]/', message: "Your password must contain a special character")]
+    #[Assert\Regex('/[\$\&\+\,\:\;\=\?\@\#\|\'\<\>\.\-\^\*\(\)\%\!\_]/', message: "Your password must contain a special character")]
     private string $plainPassword;
 
     #[ORM\Column]

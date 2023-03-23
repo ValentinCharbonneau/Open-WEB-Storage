@@ -22,13 +22,13 @@ use App\DTO\EntityDecrypt\GroupDecrypt;
 use App\DTO\EntityDecrypt\MediaDecrypt;
 use Doctrine\ORM\EntityManagerInterface;
 use App\DTO\EntityDecrypt\ArchiveDecrypt;
-use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\GroupRepository;
 use App\Doctrine\Repository\MediaRepository;
 use App\DTO\TransformerDTO\GroupTransformerInput;
 use App\DTO\TransformerDTO\MediaTransformerInput;
 use App\DTO\TransformerDTO\MediaTransformerOutput;
 use App\DTO\TransformerDTO\GroupTransformerOutput;
+use App\Services\Security\SecurityServiceInterface;
 use App\DTO\TransformerDTO\ArchiveTransformerInput;
 use App\DTO\TransformerDTO\ArchiveTransformerOutput;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -57,6 +57,7 @@ class FileSystem implements FileSystemInterface
         private GroupTransformerInput $groupTransformerInput,
         private MediaTransformerInput $mediaTransformerInput,
         private EntityManagerInterface $entityManager,
+        private SecurityServiceInterface $security,
         private GroupRepository $groupRepository,
         private MediaRepository $mediaRepository,
         private SerializerInterface $serializer,
@@ -64,7 +65,6 @@ class FileSystem implements FileSystemInterface
         private ParameterBagInterface $bag,
         private SluggerInterface $slugger,
         private Encryptor $encryptor,
-        private SecurityServiceInterface $security,
     ) {
         $this->pathToPersist = null;
     }
