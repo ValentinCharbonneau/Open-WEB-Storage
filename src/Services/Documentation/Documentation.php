@@ -30,7 +30,7 @@ class Documentation implements DocumentationInterface
     ) {
     }
 
-    public function build() : array
+    public function build(): array
     {
         $dir = $this->bag->get("kernel.project_dir");
 
@@ -61,7 +61,7 @@ class Documentation implements DocumentationInterface
             $result[$field]['admin'] = $content['admin'];
 
             if (array_key_exists('entity', $content) && $content['entity'] == false) {
-                foreach($content["endpoints"] as $endpointName => $endpoint) {
+                foreach ($content["endpoints"] as $endpointName => $endpoint) {
                     $result[$field]["endpoints"][$endpointName]["header_path"] = $this->routing->getRouteCollection()->get($endpointName)->getPath();
                     $result[$field]["endpoints"][$endpointName]["header_method"] = $this->routing->getRouteCollection()->get($endpointName)->getMethods()[0];
                     if (array_key_exists('multiple_entity', $endpoint)) {
@@ -76,7 +76,7 @@ class Documentation implements DocumentationInterface
                             $new = [];
                             foreach ($api as $apiEntityName) {
                                 if (array_key_first($apiEntityName) == $entityName) {
-                                    foreach($apiEntityName[array_key_first($apiEntityName)]["attributes"] as $attribute => $value) {
+                                    foreach ($apiEntityName[array_key_first($apiEntityName)]["attributes"] as $attribute => $value) {
                                         if (in_array($entityGroup, $groups[$entityName]["attributes"][$attribute]["groups"])) {
                                             if ($this->isJson($apiEntityName[array_key_first($apiEntityName)]['attributes'][$attribute]["exemple"])) {
                                                 $new[$attribute] = json_decode($apiEntityName[array_key_first($apiEntityName)]['attributes'][$attribute]["exemple"], true);
@@ -99,7 +99,7 @@ class Documentation implements DocumentationInterface
                             $new = [];
                             foreach ($api as $apiEntityName) {
                                 if (array_key_first($apiEntityName) == $entityName) {
-                                    foreach($apiEntityName[array_key_first($apiEntityName)]["attributes"] as $attribute => $value) {
+                                    foreach ($apiEntityName[array_key_first($apiEntityName)]["attributes"] as $attribute => $value) {
                                         if (in_array($entityGroup, $groups[$entityName]["attributes"][$attribute]["groups"])) {
                                             if ($this->isJson($apiEntityName[array_key_first($apiEntityName)]['attributes'][$attribute]["exemple"])) {
                                                 $new[$attribute] = json_decode($apiEntityName[array_key_first($apiEntityName)]['attributes'][$attribute]["exemple"], true);
@@ -127,7 +127,7 @@ class Documentation implements DocumentationInterface
                     $result[$field]["endpoints"][$endpointName]['error'] = $endpoint['error_code'];
                 }
             } else {
-                foreach($content["endpoints"] as $endpointName => $endpoint) {
+                foreach ($content["endpoints"] as $endpointName => $endpoint) {
                     if (array_key_exists('multiple_entity', $endpoint)) {
                         $result[$field]["endpoints"][$endpointName]["pagination"] = $endpoint['multiple_entity'];
                     } else {
@@ -143,7 +143,7 @@ class Documentation implements DocumentationInterface
 
                     $input = [];
                     if (array_key_exists('input_group', $endpoint)) {
-                        foreach($content["attributes"] as $attribute => $value) {
+                        foreach ($content["attributes"] as $attribute => $value) {
                             if (in_array($endpoint["input_group"], $groups[$entity]["attributes"][$attribute]["groups"])) {
                                 if ($this->isJson($value["exemple"])) {
                                     $input[$attribute] = json_decode($value["exemple"], true);
@@ -157,7 +157,7 @@ class Documentation implements DocumentationInterface
                     $output = [];
                     if (array_key_exists('output_group', $endpoint)) {
                         if ($entity == $outputEntity) {
-                            foreach($content["attributes"] as $attribute => $value) {
+                            foreach ($content["attributes"] as $attribute => $value) {
                                 if (in_array($endpoint["output_group"], $groups[$outputEntity]["attributes"][$attribute]["groups"])) {
                                     if ($this->isJson($value["exemple"])) {
                                         $output[$attribute] = json_decode($value["exemple"], true);
@@ -169,7 +169,7 @@ class Documentation implements DocumentationInterface
                         } else {
                             foreach ($api as $entityName) {
                                 if (array_key_first($entityName) == $outputEntity) {
-                                    foreach($entityName[array_key_first($entityName)]["attributes"] as $attribute => $value) {
+                                    foreach ($entityName[array_key_first($entityName)]["attributes"] as $attribute => $value) {
                                         if (in_array($endpoint["output_group"], $groups[$outputEntity]["attributes"][$attribute]["groups"])) {
                                             if ($this->isJson($entityName[array_key_first($entityName)]['attributes'][$attribute]["exemple"])) {
                                                 $output[$attribute] = json_decode($entityName[array_key_first($entityName)]['attributes'][$attribute]["exemple"], true);
@@ -209,8 +209,9 @@ class Documentation implements DocumentationInterface
         return $return;
     }
 
-    private function isJson($string) {
+    private function isJson($string)
+    {
         json_decode($string);
         return json_last_error() === JSON_ERROR_NONE;
-     }
+    }
 }

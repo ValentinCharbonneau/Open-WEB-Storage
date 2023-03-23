@@ -7,7 +7,7 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\Security;
 
@@ -39,8 +39,7 @@ class AuthenticatorRegisterController extends AbstractController
         private UserPasswordHasherInterface $passwordHasher,
         private UserValidatorInterface $userValidatorInterface,
         private UserJwtGeneratorInterface $userJwtGeneratorInterface
-    )
-    {
+    ) {
     }
 
     #[Route(name: 'register', path: '/authenticator/register', methods: ['POST'])]

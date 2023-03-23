@@ -50,7 +50,7 @@ class CreateUserCommand extends Command
             if (!count($violations)) {
                 $validEmail = true;
                 $violations = $this->validator->validate($user);
-                foreach($violations as $violation) {
+                foreach ($violations as $violation) {
                     if ($violation->getCode() == "23bd9dbf-6b9b-41cd-a99e-4844bcf3077f") {
                         $validEmail = false;
                         $output->writeln('<error>Email : ' . $violation->getMessage() . '</error>');
@@ -58,7 +58,7 @@ class CreateUserCommand extends Command
                     }
                 }
             } else {
-                foreach($violations as $violation) {
+                foreach ($violations as $violation) {
                     $output->writeln('<error>Email : ' . $violation->getMessage() . '</error>');
                 }
             }
@@ -76,7 +76,7 @@ class CreateUserCommand extends Command
                 $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
                 $pwdEmail = true;
             } else {
-                foreach($violations as $violation) {
+                foreach ($violations as $violation) {
                     $output->writeln('<error>Password : ' . $violation->getMessage() . '</error>');
                 }
             }

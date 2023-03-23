@@ -48,7 +48,6 @@ class BuildFixturesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         // Create users
         $admin = new User();
         $admin->setEmail("admin@ows.com");
@@ -87,7 +86,7 @@ class BuildFixturesCommand extends Command
         $group1 = new GroupDTO();
         $group1->path = "/empty-folder";
         $this->ged->createGroup($group1);
-        
+
 
         $this->security->setUser($toto);
         $this->encryptor->loadKeyPair($toto->getUuid());

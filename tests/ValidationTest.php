@@ -30,13 +30,13 @@ final class ValidationTest extends TestCase
 {
     private ValidatorInterface $validator;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $validatorBuilder = Validation::createValidatorBuilder();
         $this->validator = $validatorBuilder->enableAnnotationMapping()->getValidator();
     }
 
-    public function testArchive() : void
+    public function testArchive(): void
     {
         $archive = new ArchiveDecrypt();
 
@@ -53,12 +53,12 @@ final class ValidationTest extends TestCase
         $violations = $this->validator->validateProperty($archive, "uuid");
         $this->assertSame(0, count($violations));
 
-        
+
         // path //
         $violations = $this->validator->validateProperty($archive, "path");
         $this->assertSame(1, count($violations));
         $this->assertSame("c1051bb4-d103-4f74-8988-acbcafc7fdc3", $violations[0]->getCode());
-        
+
         $archive->path = "test";
         $violations = $this->validator->validateProperty($archive, "path");
         $this->assertSame(0, count($violations));
@@ -97,7 +97,7 @@ final class ValidationTest extends TestCase
         $this->assertSame(0, count($violations));
     }
 
-    public function testGroup() : void
+    public function testGroup(): void
     {
         $group = new GroupDecrypt();
 
@@ -119,7 +119,7 @@ final class ValidationTest extends TestCase
         $violations = $this->validator->validateProperty($group, "name");
         $this->assertSame(1, count($violations));
         $this->assertSame("c1051bb4-d103-4f74-8988-acbcafc7fdc3", $violations[0]->getCode());
-        
+
         $group->name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         $violations = $this->validator->validateProperty($group, "name");
         $this->assertSame(1, count($violations));
@@ -130,7 +130,7 @@ final class ValidationTest extends TestCase
         $this->assertSame(0, count($violations));
     }
 
-    public function testMedia() : void
+    public function testMedia(): void
     {
         $media = new MediaDecrypt();
 
@@ -152,7 +152,7 @@ final class ValidationTest extends TestCase
         $violations = $this->validator->validateProperty($media, "name");
         $this->assertSame(1, count($violations));
         $this->assertSame("c1051bb4-d103-4f74-8988-acbcafc7fdc3", $violations[0]->getCode());
-        
+
         $media->name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         $violations = $this->validator->validateProperty($media, "name");
         $this->assertSame(1, count($violations));
@@ -162,12 +162,12 @@ final class ValidationTest extends TestCase
         $violations = $this->validator->validateProperty($media, "name");
         $this->assertSame(0, count($violations));
 
-        
+
         // type ///
         $violations = $this->validator->validateProperty($media, "type");
         $this->assertSame(1, count($violations));
         $this->assertSame("c1051bb4-d103-4f74-8988-acbcafc7fdc3", $violations[0]->getCode());
-        
+
         $media->type = "aaaaaaaaa";
         $violations = $this->validator->validateProperty($media, "type");
 
@@ -212,7 +212,7 @@ final class ValidationTest extends TestCase
         $this->assertSame(0, count($violations));
     }
 
-    public function testUser() : void
+    public function testUser(): void
     {
         $user = new User();
 

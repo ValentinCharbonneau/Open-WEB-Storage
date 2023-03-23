@@ -7,7 +7,7 @@
  * @ Licence For the full copyright and license information, please view the LICENSE
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Controller\User;
 
@@ -37,7 +37,7 @@ class DeleteMeController extends AbstractController
     public function __invoke(): JsonResponse
     {
         $user = $this->security->getUser();
-        
+
         unlink($this->bag->get("key_dir") . "/" . $user->getUuid() . ".key");
         rmdir($this->bag->get("doc_dir") . "/" . $user->getUuid());
         rmdir($this->bag->get("archive_dir") . "/" . $user->getUuid());

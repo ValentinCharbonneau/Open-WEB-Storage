@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * @author Valentin Charbonneau <valentincharbonneau@outlook.fr>
  */
-class SecurityService  implements SecurityServiceInterface
+class SecurityService implements SecurityServiceInterface
 {
     private ?User $user;
 
@@ -31,12 +31,12 @@ class SecurityService  implements SecurityServiceInterface
         $this->user = $this->security->getUser();
     }
 
-    public function getUser() : ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(User $user) : self
+    public function setUser(User $user): self
     {
         if (empty($this->requestStack->getCurrentRequest()) || empty($this->user)) {
             $this->user = $user;
