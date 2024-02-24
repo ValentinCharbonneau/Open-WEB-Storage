@@ -2,6 +2,7 @@
 
 /**
  * @ Created on 28/02/2023 10:00
+ * @ Updated on 24/02/2024 19:04
  * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
@@ -10,11 +11,6 @@
 declare(strict_types=1);
 
 namespace App\DTO\Security;
-
-use Symfony\Component\Serializer\Annotation\Groups;
-use App\Controller\Security\AuthenticatorLoginController;
-use App\Controller\Security\AuthenticatorRegisterController;
-use App\Controller\Security\AuthenticatorRefreshJwtController;
 
 /**
  * Class Authenticator.

@@ -2,6 +2,7 @@
 
 /**
  * @ Created on 14/03/2023 13:49
+ * @ Updated on 24/02/2024 19:18
  * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
@@ -15,10 +16,8 @@ use App\Doctrine\Entity\User;
 use PHPUnit\Framework\TestCase;
 use App\DTO\EntityDecrypt\MediaDecrypt;
 use App\DTO\EntityDecrypt\GroupDecrypt;
-use Doctrine\ORM\EntityManagerInterface;
 use App\DTO\EntityDecrypt\ArchiveDecrypt;
 use Symfony\Component\Validator\Validation;
-use App\Services\FileSystem\FileSystemInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -33,7 +32,7 @@ final class ValidationTest extends TestCase
     protected function setUp(): void
     {
         $validatorBuilder = Validation::createValidatorBuilder();
-        $this->validator = $validatorBuilder->enableAnnotationMapping()->getValidator();
+        $this->validator = $validatorBuilder->enableAttributeMapping()->getValidator();
     }
 
     public function testArchive(): void
@@ -224,7 +223,7 @@ final class ValidationTest extends TestCase
         $user->setEmail("test");
         $violations = $this->validator->validateProperty($user, "email");
         $this->assertSame(1, count($violations));
-        $this->assertSame("bd79c0ab-ddba-46cc-a703-a7a4b08de310", $violations[0]->getCode());
+        $this->assertSame("de1e3db3-5ed4-4941-aae4-59f3667cc3a3", $violations[0]->getCode());
 
         $user->setEmail("test@test.testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest");
         $violations = $this->validator->validateProperty($user, "email");
