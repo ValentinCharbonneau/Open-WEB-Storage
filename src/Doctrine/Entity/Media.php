@@ -2,6 +2,7 @@
 
 /**
  * @ Created on 10/02/2023 13:34
+ * @ Updated on 24/02/2024 19:02
  * @ This file is part of the Open WEB Storage project.
  * @ Contact (c) Valentin Charbonneau <valentincharbonneau@outlook.fr>
  * @ Licence For the full copyright and license information, please view the LICENSE
@@ -13,7 +14,6 @@ namespace App\Doctrine\Entity;
 
 use App\Doctrine\Entity\User;
 use Doctrine\DBAL\Types\Types;
-use App\DTO\EntityDTO\MediaDTO;
 use Doctrine\ORM\Mapping as ORM;
 use App\Doctrine\Repository\MediaRepository;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
