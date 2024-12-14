@@ -20,4 +20,24 @@ use App\Doctrine\Entity\User;
  */
 interface UserValidatorInterface
 {
+    /**
+     * Validate the user
+     *
+     * @param User $user
+     */
+    function validate(User $user): void;
+
+    /**
+     * Return if the user is violating
+     *
+     * @return bool|null
+     */
+    function isViolating(): ?bool;
+
+    /**
+     * Return all violations
+     *
+     * @return array|null
+     */
+    function getViolations(): ?array;
 }

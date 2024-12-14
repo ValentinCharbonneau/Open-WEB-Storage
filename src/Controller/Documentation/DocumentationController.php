@@ -12,11 +12,8 @@ declare(strict_types=1);
 namespace App\Controller\Documentation;
 
 use Symfony\Component\Routing\Annotation\Route;
-use App\Services\GEDService\GEDServiceInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Services\Documentation\DocumentationInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/', name: 'home_documentation', methods: ['GET'])]
 class DocumentationController extends AbstractController
@@ -25,9 +22,6 @@ class DocumentationController extends AbstractController
         DocumentationInterface $documentation
     ) {
         $result = $documentation->build();
-        // dd([
-        //     'api' => $result["result"], "pagination" => $result["pagination"]
-        // ]);
         return $this->render('documentation.html.twig', [
             'api' => $result["result"], "pagination" => $result["pagination"]
         ]);

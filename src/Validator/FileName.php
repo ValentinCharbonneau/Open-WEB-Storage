@@ -35,7 +35,6 @@ class FileName extends Constraint
         return self::CLASS_CONSTRAINT;
     }
 
-
     public function getMessage(): string
     {
         return $this->message;

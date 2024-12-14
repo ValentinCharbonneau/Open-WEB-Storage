@@ -13,8 +13,6 @@ namespace App\Services\Documentation;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -60,7 +58,7 @@ class Documentation implements DocumentationInterface
             $result[$field] = [];
             $result[$field]['admin'] = $content['admin'];
 
-            if (array_key_exists('entity', $content) && $content['entity'] == false) {
+            if (array_key_exists('entity', $content) && !$content['entity']) {
                 foreach ($content["endpoints"] as $endpointName => $endpoint) {
                     $result[$field]["endpoints"][$endpointName]["header_path"] = $this->routing->getRouteCollection()->get($endpointName)->getPath();
                     $result[$field]["endpoints"][$endpointName]["header_method"] = $this->routing->getRouteCollection()->get($endpointName)->getMethods()[0];

@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
@@ -23,9 +23,9 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class MediaReadAllController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        SerializerInterface $serializer,
         RequestStack $requestStack,
+        GEDServiceInterface $gedService,
+        NormalizerInterface $normalizer,
     ) {
         if (!empty($requestStack->getCurrentRequest()->query->get("page"))) {
             try {
@@ -41,9 +41,9 @@ class MediaReadAllController extends AbstractController
         }
 
         $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:media']);
-        $result = $GEDService->readAllMedia($page);
+        $result = $gedService->readAllMedia($page);
         foreach ($result as &$media) {
-            $media = $serializer->normalize($media, 'json', $outputContext->toArray());
+            $media = $normalizer->normalize($media, 'json', $outputContext->toArray());
         }
 
         return new JsonResponse($result);

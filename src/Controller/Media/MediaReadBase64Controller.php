@@ -15,26 +15,26 @@ use App\DTO\EntityDTO\MediaDTO;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/file/base64/{uuid}', name: 'media_read_base64', methods: ['GET'])]
 class MediaReadBase64Controller extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        SerializerInterface $serializer,
-        string $uuid
+        string $uuid,
+        GEDServiceInterface $gedService,
+        NormalizerInterface $normalizer,
     ) {
         try {
-            $content = $GEDService->readBase64Media($uuid);
+            $content = $gedService->readBase64Media($uuid);
             $mediaDTO = new MediaDTO();
             $mediaDTO->content = $content;
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['file:media']);
-            return new JsonResponse($serializer->normalize($mediaDTO, 'json', $outputContext->toArray()));
-        } catch (ResourceNotFoundException $e) {
+            return new JsonResponse($normalizer->normalize($mediaDTO, 'json', $outputContext->toArray()));
+        } catch (ResourceNotFoundException $_) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }
     }

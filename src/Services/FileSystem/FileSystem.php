@@ -31,9 +31,9 @@ use App\DTO\TransformerDTO\GroupTransformerOutput;
 use App\Services\Security\SecurityServiceInterface;
 use App\DTO\TransformerDTO\ArchiveTransformerInput;
 use App\DTO\TransformerDTO\ArchiveTransformerOutput;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -60,7 +60,7 @@ class FileSystem implements FileSystemInterface
         private SecurityServiceInterface $security,
         private GroupRepository $groupRepository,
         private MediaRepository $mediaRepository,
-        private SerializerInterface $serializer,
+        private NormalizerInterface $normalizer,
         private ValidatorInterface $validator,
         private ParameterBagInterface $bag,
         private SluggerInterface $slugger,
@@ -74,7 +74,7 @@ class FileSystem implements FileSystemInterface
      */
     public function cleanPath(string $path): string
     {
-        $path = preg_replace('/\\\\/i', "/", $path);
+        $path = str_replace('/\\\\/i', "/", $path);
         $path = preg_replace('/\/+/i', "/", $path);
         $path = preg_replace('/^\//i', "", $path);
         return preg_replace('/\/$/i', "", $path);
@@ -183,12 +183,13 @@ class FileSystem implements FileSystemInterface
                 $encryptEntity->setParent($decryptEntity->parent);
                 return $encryptEntity;
             case ArchiveDecrypt::class:
-                $encryptEntity = new Archive(
+                return new Archive(
                     $this->encryptor->encryptData($decryptEntity->path),
                     $this->encryptor->encryptData(json_encode($decryptEntity->metadata)),
                     $decryptEntity->owner
                 );
-                return $encryptEntity;
+            default:
+                throw new \InvalidArgumentException ("GED service FileSystem : \$decryptEntity must be MediaDecrypt::class, GroupDecrypt::class or ArchiveDecrypt::class");
         }
     }
 
@@ -227,8 +228,9 @@ class FileSystem implements FileSystemInterface
                 $decryptEntity->path = $this->encryptor->decryptData($encryptEntity->getPath());
                 $decryptEntity->metadata = json_decode($this->encryptor->decryptData($encryptEntity->getMetadata()));
                 $decryptEntity->owner = $encryptEntity->getOwner();
-
                 return $decryptEntity;
+            default:
+                throw new \InvalidArgumentException ("GED service FileSystem : \$encryptEntity must be Media::class, Group::class or Archive::class");
         }
     }
 
@@ -240,27 +242,36 @@ class FileSystem implements FileSystemInterface
      */
     public function fullTransform(Media|MediaDTO|Group|GroupDTO|Archive|ArchiveDTO $entity): Media|MediaDTO|Group|GroupDTO|Archive|ArchiveDTO
     {
+        $entity;
         switch (get_class($entity)) {
             case Media::class:
                 $decrypt = $this->decrypt($entity);
-                return $this->mediaTransformerOutput->transform($decrypt);
+                $entity = $this->mediaTransformerOutput->transform($decrypt);
+                break;
             case MediaDTO::class:
                 $decrypt = $this->mediaTransformerInput->transform($entity, $this->explodePath($entity->path), $this->buildParents($entity->path));
-                return $this->encrypt($decrypt);
-                # Because of Group has a recursive relation, Doctrine can not load completely all Group, and it can be a Proxy
+                $entity = $this->encrypt($decrypt);
+                break;
+            # Because of Group has a recursive relation, Doctrine can not load completely all Group, and it can be a Proxy
             case "Proxies\__CG__\App\Doctrine\Entity\Group":
             case Group::class:
                 $decrypt = $this->decrypt($entity);
-                return $this->groupTransformerOutput->transform($decrypt);
+                $entity = $this->groupTransformerOutput->transform($decrypt);
+                break;
             case GroupDTO::class:
                 $decrypt = $this->groupTransformerInput->transform($entity, $this->explodePath($entity->path), $this->buildParents($entity->path));
-                return $this->encrypt($decrypt);
+                $entity = $this->encrypt($decrypt);
+                break;
             case Archive::class:
                 $decrypt = $this->decrypt($entity);
-                return $this->archiveTransformerOutput->transform($decrypt);
+                $entity = $this->archiveTransformerOutput->transform($decrypt);
+                break;
             case ArchiveDTO::class:
                 $decrypt = $this->archiveTransformerInput->transform($entity);
-                return $this->encrypt($decrypt);
+                $entity = $this->encrypt($decrypt);
+                break;
+            default:
+                throw new \InvalidArgumentException ("GED service FileSystem : \$entity must be Media::class, MediaDTO::class, Group::class, GroupDTO::class, Archive::class or ArchiveDTO::class");
         }
 
         return $entity;
@@ -274,27 +285,35 @@ class FileSystem implements FileSystemInterface
      */
     public function transform(MediaDecrypt|MediaDTO|GroupDecrypt|GroupDTO|ArchiveDecrypt|ArchiveDTO $entity): MediaDecrypt|MediaDTO|GroupDecrypt|GroupDTO|ArchiveDecrypt|ArchiveDTO
     {
+        $entity;
         switch (get_class($entity)) {
             case MediaDTO::class:
-                return $this->mediaTransformerInput->transform(
+                $entity = $this->mediaTransformerInput->transform(
                     $entity,
                     isset($entity->path) ? $this->explodePath($entity->path) : [null],
                     isset($entity->path) ? $this->buildParents($entity->path) : null
                 );
+                break;
             case MediaDecrypt::class:
                 return $this->mediaTransformerOutput->transform($entity);
             case GroupDTO::class:
-                return $this->groupTransformerInput->transform(
+                $entity = $this->groupTransformerInput->transform(
                     $entity,
                     isset($entity->path) ? $this->explodePath($entity->path) : [null],
                     isset($entity->path) ? $this->buildParents($entity->path) : null
                 );
+                break;
             case GroupDecrypt::class:
-                return $this->groupTransformerOutput->transform($entity);
+                $entity = $this->groupTransformerOutput->transform($entity);
+                break;
             case ArchiveDTO::class:
-                return $this->archiveTransformerInput->transform($entity);
+                $entity = $this->archiveTransformerInput->transform($entity);
+                break;
             case ArchiveDecrypt::class:
-                return $this->archiveTransformerOutput->transform($entity);
+                $entity = $this->archiveTransformerOutput->transform($entity);
+                break;
+            default:
+                throw new \InvalidArgumentException ("GED service FileSystem : \$entity must be MediaDTO::class, MediaDecrypt::class, GroupDTO::class, GroupDecrypt::class, ArchiveDTO::class or ArchiveDecrypt::class");
         }
 
         return $entity;
@@ -324,7 +343,7 @@ class FileSystem implements FileSystemInterface
                     $this->encryptor->encryptData($file)
                 );
             } else {
-                throw new \Exception("Folder '" . $this->bag->get("doc_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $entity->getUuid() . "' already exist");
+                throw new \LogicException("Folder '" . $this->bag->get("doc_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $entity->getUuid() . "' already exist");
             }
         } elseif ($entity instanceof Archive && !empty($file)) {
             if (!file_exists($this->bag->get("archive_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $entity->getUuid())) {
@@ -333,7 +352,7 @@ class FileSystem implements FileSystemInterface
                     $this->encryptor->encryptData($file)
                 );
             } else {
-                throw new \Exception("Folder '" . $this->bag->get("archive_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $entity->getUuid() . "' already exist");
+                throw new \LogicException("Folder '" . $this->bag->get("archive_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $entity->getUuid() . "' already exist");
             }
         }
 
@@ -426,7 +445,7 @@ class FileSystem implements FileSystemInterface
                 }
 
                 # Else, we return the Media entity
-                return $this->serializer->normalize($this->fullTransform($result), 'json', $mediaContext->toArray());
+                return $this->normalizer->normalize($this->fullTransform($result), 'json', $mediaContext->toArray());
             } elseif ((count($parents) == 1 && $parents[0] == null) || ($parents[count($parents) - 1] == null && empty($parents[count($parents) - 2]))) {
                 # If the more of one element is null in the path, the resource doesn't exist
                 throw new NotFoundHttpException();
@@ -442,10 +461,10 @@ class FileSystem implements FileSystemInterface
 
         # We normalize the elements and add at the final $result
         foreach ($groups as $group) {
-            $result[] = $this->serializer->normalize($this->fullTransform($group), 'json', $groupContext->toArray());
+            $result[] = $this->normalizer->normalize($this->fullTransform($group), 'json', $groupContext->toArray());
         }
         foreach ($medias as $media) {
-            $result[] = $this->serializer->normalize($this->fullTransform($media), 'json', $mediaContext->toArray());
+            $result[] = $this->normalizer->normalize($this->fullTransform($media), 'json', $mediaContext->toArray());
         }
 
         return $result;

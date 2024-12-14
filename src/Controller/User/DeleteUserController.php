@@ -11,12 +11,11 @@ declare(strict_types=1);
 
 namespace App\Controller\User;
 
-use App\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Services\Security\SecurityServiceInterface;
 use App\Doctrine\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -28,10 +27,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class DeleteUserController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManagerInterface,
-        private UserRepository $userRepository,
         private ParameterBagInterface $bag,
-        private SecurityServiceInterface $security
+        private UserRepository $userRepository,
+        private SecurityServiceInterface $security,
+        private EntityManagerInterface $entityManagerInterface,
     ) {
     }
 

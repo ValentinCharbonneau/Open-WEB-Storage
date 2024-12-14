@@ -26,13 +26,17 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class MediaReadBinController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
+        GEDServiceInterface $gedService,
         FileSystemInterface $fileSystem,
         EncryptorInterface $encryptor,
         string $uuid
     ) {
         try {
-            $content = $GEDService->readBase64Media($uuid);
+            $content = $gedService->readBase64Media($uuid);
+
+            /**
+             * @var Media $media
+             */
             $media = $fileSystem->get($uuid, Media::class);
 
             $response = new Response(base64_decode($content));
@@ -50,6 +54,9 @@ class MediaReadBinController extends AbstractController
                     break;
                 case "csv":
                     $response->headers->set('Content-Type', "text/csv");
+                    break;
+                default:
+                    $response->headers->set('Content-Type', "application/octet-stream");
                     break;
             }
 

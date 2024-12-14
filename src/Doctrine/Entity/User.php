@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         '/[\$\&\+\,\:\;\=\?\@\#\|\'\<\>\.\-\^\*\(\)\%\!\_]/',
         message: "Your password must contain a special character"
     )]
-    private string $plainPassword;
+    private ?string $plainPassword;
 
     #[ORM\Column]
     private string $password;

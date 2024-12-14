@@ -11,14 +11,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Security;
 
-use App\Doctrine\Entity\User;
 use App\DTO\Security\Authenticator;
 use App\Doctrine\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use App\Services\UserJwtGenerator\UserJwtGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
@@ -33,10 +31,10 @@ class AuthenticatorRefreshJwtController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
-        private SerializerInterface $serializerInterface,
-        private JWTTokenManagerInterface  $jWTTokenManagerInterface,
+        private NormalizerInterface $normalizerInterface,
         private TokenStorageInterface $tokenStorageInterface,
-        private UserJwtGeneratorInterface $userJwtGeneratorInterface
+        private JWTTokenManagerInterface  $jWTTokenManagerInterface,
+        private UserJwtGeneratorInterface $userJwtGeneratorInterface,
     ) {
     }
 
@@ -55,6 +53,6 @@ class AuthenticatorRefreshJwtController extends AbstractController
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('auth:jwt')->toArray();
 
-        return new JsonResponse($this->serializerInterface->normalize($authenticator, 'json', $contextBuilder));
+        return new JsonResponse($this->normalizerInterface->normalize($authenticator, 'json', $contextBuilder));
     }
 }
