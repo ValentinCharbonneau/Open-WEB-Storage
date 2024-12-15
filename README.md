@@ -1,19 +1,19 @@
-# Open WEB Storage V1.0.0
+# Open WEB Storage v1.0.3
 Open WEB Storage is an open source project to store and encrypt your documents.
 
 ## Prerequisites
-- Designed for Debian 11 Bullseye and another distribution based on Debian
+- Designed for Debian 12 Bookworm and another distribution based on Debian
 - OpenSSL
 - MariaDB/MySQL, PostgreSQL, or SQLite database
-- Apache 2
-- [PHP 8.1](https://github.com/ValentinCharbonneau/Open-WEB-Storage/tree/v1.0.0/readme/php81.md) and the following modules:
+- Apache2 or Nginx
+- [PHP 8.3] and the following modules:
     - curl
     - xml
     - gettext
     - intl
     - mbstring
     - pdo_mysql, pdo_pgsql, or pdo_sqlite depending on your database server
-- [Composer 2.4](https://github.com/ValentinCharbonneau/Open-WEB-Storage/tree/v1.0.0/readme/composer.md) or higher
+- [Composer 2.7] or higher
 
 ## PHP extensions
 To install Open WEB Storage, you need to install the PHP8 extensions with the following commands
@@ -21,19 +21,19 @@ To install Open WEB Storage, you need to install the PHP8 extensions with the fo
 sudo apt update
 ```
 ```
-sudo apt install php8.1 php8.1-curl php8.1-intl php8.1-mbstring php8.1-xml php8.1-opcache
+sudo apt install php8.3 php8.3-curl php8.3-intl php8.3-mbstring php8.3-xml php8.3-opcache
 ```
 If you use MariaDB/MySQL
 ```
-sudo apt install php8.1-pdo-mysql
+sudo apt install php8.3-pdo-mysql
 ```
 If you use PostreSQL
 ```
-sudo apt install php8.1-pdo-pgsql
+sudo apt install php8.3-pdo-pgsql
 ```
 If you use SQLite
 ```
-sudo apt install php8.1-pdo-sqlite
+sudo apt install php8.3-pdo-sqlite
 ```
 
 ## Apache modules
