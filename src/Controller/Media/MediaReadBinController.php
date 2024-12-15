@@ -61,7 +61,7 @@ class MediaReadBinController extends AbstractController
             }
 
             return $response;
-        } catch (ResourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $_) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }
     }

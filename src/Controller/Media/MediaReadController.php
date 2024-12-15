@@ -30,7 +30,7 @@ class MediaReadController extends AbstractController
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:media']);
             return new JsonResponse($normalizer->normalize($gedService->readMedia($uuid), 'json', $outputContext->toArray()));
-        } catch (ResourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $_) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }
     }
