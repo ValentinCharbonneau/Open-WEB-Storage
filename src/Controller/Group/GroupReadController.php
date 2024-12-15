@@ -11,29 +11,26 @@ declare(strict_types=1);
 
 namespace App\Controller\Group;
 
-use App\Doctrine\Entity\Group;
-use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Services\FileSystem\FileSystemInterface;
+use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 #[Route('/dir/{uuid}', name: 'group_read', methods: ['GET'])]
 class GroupReadController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        FileSystemInterface $fileSystem,
-        SerializerInterface $serializer,
-        string $uuid
+        string $uuid,
+        GEDServiceInterface $gedService,
+        NormalizerInterface $normalizer,
     ) {
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:group']);
-            return new JsonResponse($serializer->normalize($GEDService->readGroup($uuid), 'json', $outputContext->toArray()));
-        } catch (ResourceNotFoundException $e) {
+            return new JsonResponse($normalizer->normalize($gedService->readGroup($uuid), 'json', $outputContext->toArray()));
+        } catch (ResourceNotFoundException $_) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }
     }

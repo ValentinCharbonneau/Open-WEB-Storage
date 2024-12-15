@@ -90,7 +90,7 @@ class Encryptor implements EncryptorInterface
         if (!empty($this->user)) {
             return openssl_encrypt($data, $this->algo, $this->key, 0, $this->iv);
         } else {
-            throw new \Exception("No one user was loaded in Encryptor");
+            throw new \LogicException("No one user was loaded in Encryptor");
         }
     }
 
@@ -103,7 +103,7 @@ class Encryptor implements EncryptorInterface
         if (!empty($this->user)) {
             return openssl_decrypt($data, $this->algo, $this->key, 0, $this->iv);
         } else {
-            throw new \Exception("No one user was loaded in Encryptor");
+            throw new \LogicException("No one user was loaded in Encryptor");
         }
     }
 }

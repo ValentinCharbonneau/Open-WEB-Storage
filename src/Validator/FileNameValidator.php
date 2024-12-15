@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use App\Doctrine\Entity\Group;
-use App\Doctrine\Entity\Media;
 use App\DTO\EntityDecrypt\GroupDecrypt;
 use App\DTO\EntityDecrypt\MediaDecrypt;
 use Symfony\Component\Validator\Constraint;

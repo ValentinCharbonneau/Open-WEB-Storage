@@ -24,7 +24,8 @@ use App\Services\Encryptor\EncryptorInterface;
 use App\Doctrine\Repository\ArchiveRepository;
 use App\Services\FileSystem\FileSystemInterface;
 use App\Services\Security\SecurityServiceInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -39,13 +40,14 @@ class GEDService implements GEDServiceInterface
 {
     public function __construct(
         private ArchiveRepository $archiveRepository,
+        private DenormalizerInterface $denormalizer,
+        private SecurityServiceInterface $security,
         private GroupRepository $groupRepository,
         private MediaRepository $mediaRepository,
         private FileSystemInterface $fileSystem,
-        private SerializerInterface $serializer,
+        private NormalizerInterface $normalizer,
         private EncryptorInterface $encryptor,
         private ParameterBagInterface $bag,
-        private SecurityServiceInterface $security,
     ) {
         if (!empty($this->security->getUser())) {
             $this->encryptor->loadKeyPair($this->security->getUser()->getUuid());
@@ -78,20 +80,23 @@ class GEDService implements GEDServiceInterface
 
     public function updateGroup(GroupDTO $groupDTO): GroupDTO
     {
+        /**
+         * @var Group
+         */
         $currentGroup = $this->fileSystem->get($groupDTO->uuid, Group::class);
-        if (empty($currentGroup)) {
+        if ($currentGroup === null) {
             throw new ResourceNotFoundException();
         }
 
         $currentDecryptGroup = $this->fileSystem->decrypt($currentGroup);
 
         $mergeGroup = array_merge(
-            array_filter($this->serializer->normalize($this->fileSystem->fullTransform($currentGroup), 'json')),
-            array_filter($this->serializer->normalize($groupDTO, 'json'))
+            array_filter($this->normalizer->normalize($this->fileSystem->fullTransform($currentGroup), 'json')),
+            array_filter($this->normalizer->normalize($groupDTO, 'json'))
         );
 
         $inputContext = (new ObjectNormalizerContextBuilder())->withGroups(['write:group']);
-        $groupDTO = $this->serializer->denormalize($mergeGroup, GroupDTO::class, 'json', $inputContext->toArray());
+        $groupDTO = $this->denormalizer->denormalize($mergeGroup, GroupDTO::class, 'json', $inputContext->toArray());
 
         $groupDecrypt = $this->fileSystem->transform($groupDTO);
 
@@ -115,13 +120,16 @@ class GEDService implements GEDServiceInterface
 
     public function deleteGroup(string $uuid): void
     {
-        $group = $archive = $this->fileSystem->get($uuid, Group::class);
+        /**
+         * @var Group
+         */
+        $group = $this->fileSystem->get($uuid, Group::class);
         if (empty($group)) {
             throw new ResourceNotFoundException();
         }
 
         if (count($this->groupRepository->findBy(["parent" => $group])) || count($this->mediaRepository->findBy(["parent" => $group]))) {
-            throw new \Exception("Directory must be empty to be removed.");
+            throw new \LogicException("Directory must be empty to be removed.");
         }
 
         $this->fileSystem->remove($group);
@@ -129,6 +137,9 @@ class GEDService implements GEDServiceInterface
 
     public function readGroup(string $uuid): GroupDTO
     {
+        /**
+         * @var GroupDTO
+         */
         $group = $this->fileSystem->get($uuid, Group::class);
         if (empty($group)) {
             throw new ResourceNotFoundException();
@@ -164,7 +175,7 @@ class GEDService implements GEDServiceInterface
         if (count($violations)) {
             throw new ValidationFailedException($mediaDTO, $violations);
         } elseif (empty($mediaDTO->content)) {
-            throw new \Exception("Content is required.");
+            throw new \LogicException("Content is required.");
         }
 
         $group = $this->fileSystem->encrypt($groupDecrypt);
@@ -183,12 +194,12 @@ class GEDService implements GEDServiceInterface
         $currentDecryptMedia = $this->fileSystem->decrypt($currentMedia);
 
         $mergeMedia = array_merge(
-            array_filter($this->serializer->normalize($this->fileSystem->fullTransform($currentMedia), 'json')),
-            array_filter($this->serializer->normalize($mediaDTO, 'json'))
+            array_filter($this->normalizer->normalize($this->fileSystem->fullTransform($currentMedia), 'json')),
+            array_filter($this->normalizer->normalize($mediaDTO, 'json'))
         );
 
         $inputContext = (new ObjectNormalizerContextBuilder())->withGroups(['write:media']);
-        $mediaDTO = $this->serializer->denormalize($mergeMedia, MediaDTO::class, 'json', $inputContext->toArray());
+        $mediaDTO = $this->denormalizer->denormalize($mergeMedia, MediaDTO::class, 'json', $inputContext->toArray());
 
         $mediaDecrypt = $this->fileSystem->transform($mediaDTO);
 
@@ -221,6 +232,9 @@ class GEDService implements GEDServiceInterface
 
     public function archiveMedia(string $uuid): ArchiveDTO
     {
+        /**
+         * @var Media
+         */
         $media = $this->fileSystem->get($uuid, Media::class);
         if (empty($media)) {
             throw new ResourceNotFoundException();
@@ -247,6 +261,9 @@ class GEDService implements GEDServiceInterface
 
     public function readMedia(string $uuid): MediaDTO
     {
+        /**
+         * @var MediaDTO
+         */
         $media = $this->fileSystem->get($uuid, Media::class);
         if (empty($media)) {
             throw new ResourceNotFoundException();
@@ -280,7 +297,7 @@ class GEDService implements GEDServiceInterface
         }
 
         if (!file_exists($this->bag->get("doc_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $uuid)) {
-            throw new \Exception("File doesn't exist.");
+            throw new \LogicException("File doesn't exist.");
         }
 
         $mediaDTO = new MediaDTO();
@@ -293,6 +310,9 @@ class GEDService implements GEDServiceInterface
     ### Archive ###
     public function deleteArchive(string $uuid): void
     {
+        /**
+         * @var Archive
+         */
         $archive = $this->fileSystem->get($uuid, Archive::class);
         if (empty($archive)) {
             throw new ResourceNotFoundException();
@@ -303,6 +323,9 @@ class GEDService implements GEDServiceInterface
 
     public function readArchive(string $uuid): ArchiveDTO
     {
+        /**
+         * @var ArchiveDTO
+         */
         $archive = $this->fileSystem->get($uuid, Archive::class);
         if (empty($archive)) {
             throw new ResourceNotFoundException();
@@ -336,7 +359,7 @@ class GEDService implements GEDServiceInterface
         }
 
         if (!file_exists($this->bag->get("archive_dir") . "/" . $this->security->getUser()->getUuid() . "/" . $uuid)) {
-            throw new \Exception("File doesn't exist.");
+            throw new \LogicException("File doesn't exist.");
         }
 
         $archiveDTO = new ArchiveDTO();

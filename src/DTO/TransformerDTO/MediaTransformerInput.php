@@ -23,8 +23,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class MediaTransformerInput
 {
     public function __construct(
-        private SecurityServiceInterface $security,
         private SluggerInterface $slugger,
+        private SecurityServiceInterface $security,
     ) {
     }
 

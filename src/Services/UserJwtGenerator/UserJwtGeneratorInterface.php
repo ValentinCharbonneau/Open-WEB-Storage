@@ -20,4 +20,25 @@ use App\Doctrine\Entity\User;
  */
 interface UserJwtGeneratorInterface
 {
+    /**
+     * Generate a bearer token for the user
+     *
+     * @param User $user
+     * @return void
+     */
+    function generate(User $user): void;
+
+    /**
+     * Return the token
+     *
+     * @return string|null
+     */
+    function getToken(): ?string;
+
+    /**
+     * Return the expiration time
+     *
+     * @return int|null
+     */
+    function getExpire(): ?int;
 }

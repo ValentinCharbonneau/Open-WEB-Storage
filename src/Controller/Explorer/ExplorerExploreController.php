@@ -21,12 +21,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ExplorerExploreController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
+        GEDServiceInterface $gedService,
         ?string $path = null
     ) {
         try {
-            return new JsonResponse($GEDService->explore($path));
-        } catch (NotFoundHttpException $e) {
+            return new JsonResponse($gedService->explore($path));
+        } catch (NotFoundHttpException $_) {
             return new JsonResponse(["code" => 404, "message" => "Not found file '$path'"], 404);
         }
     }

@@ -19,31 +19,37 @@ use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 #[Route('/file/{uuid}', name: 'media_update', methods: ['PUT'])]
 class MediaUpdateController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
+        string $uuid,
+        RequestStack $requestStack,
+        GEDServiceInterface $gedService,
         FileSystemInterface $fileSystem,
         SerializerInterface $serializer,
-        RequestStack $requestStack,
-        string $uuid
+        NormalizerInterface $normalizer,
     ) {
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:media']);
             $media = $serializer->deserialize($requestStack->getCurrentRequest()->getContent(), MediaDTO::class, 'json');
             $media->uuid = $uuid;
-            return new JsonResponse($serializer->normalize($GEDService->updateMedia($media), 'json', $outputContext->toArray()), 201);
+            return new JsonResponse($normalizer->normalize($gedService->updateMedia($media), 'json', $outputContext->toArray()), 201);
         } catch (ValidationFailedException $e) {
+            /**
+             * @var Group $group
+             */
+            $group = $fileSystem->get($uuid, Group::class);
             return new JsonResponse([
                 "code" => 422,
-                "directory" => "/" . $fileSystem->fullTransform($fileSystem->get($uuid, Group::class))->path,
-                "violations" => $serializer->normalize($e->getViolations(), 'json')
+                "directory" => "/" . $fileSystem->fullTransform($group)->path,
+                "violations" => $normalizer->normalize($e->getViolations(), 'json')
             ], 422);
         } catch (ResourceNotFoundException $e) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);

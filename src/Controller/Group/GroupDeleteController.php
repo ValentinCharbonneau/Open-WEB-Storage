@@ -23,19 +23,23 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GroupDeleteController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
+        string $uuid,
+        GEDServiceInterface $gedService,
         FileSystemInterface $fileSystem,
-        string $uuid
     ) {
         try {
-            $GEDService->deleteGroup($uuid);
+            $gedService->deleteGroup($uuid);
             return new JsonResponse(["code" => 204, "message" => "Resource was removed"], 204);
         } catch (ResourceNotFoundException $e) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         } catch (\Exception $e) {
+            /**
+             * @var Group $group
+             */
+            $group = $fileSystem->get($uuid, Group::class);
             if ($e->getMessage() == "Directory must be empty to be removed.") {
                 return new JsonResponse(["code" => 422,
-                    "directories" => $fileSystem->fullTransform($fileSystem->get($uuid, Group::class))->path,
+                    "directories" => $fileSystem->fullTransform($group)->path,
                     "message" => $e->getMessage()], 422);
             } else {
                 throw $e;

@@ -11,40 +11,39 @@ declare(strict_types=1);
 
 namespace App\Controller\Media;
 
-use App\Doctrine\Entity\Group;
 use App\DTO\EntityDTO\MediaDTO;
-use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Services\FileSystem\FileSystemInterface;
+use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 #[Route('/file', name: 'media_create', methods: ['POST'])]
 class MediaCreateController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        FileSystemInterface $fileSystem,
+        RequestStack $requestStack,
+        GEDServiceInterface $gedService,
         SerializerInterface $serializer,
-        RequestStack $requestStack
+        NormalizerInterface $normalizer,
     ) {
         $inputContext = (new ObjectNormalizerContextBuilder())->withGroups(['write:media']);
         $mediaDTO = $serializer->deserialize($requestStack->getCurrentRequest()->getContent(), MediaDTO::class, 'json', $inputContext->toArray());
 
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:media']);
-            return new JsonResponse($serializer->normalize($GEDService->createMedia($mediaDTO), 'json', $outputContext->toArray()), 201);
+            return new JsonResponse($normalizer->normalize($gedService->createMedia($mediaDTO), 'json', $outputContext->toArray()), 201);
         } catch (ValidationFailedException $e) {
             $return = [
                 "code" => 422,
-                "violations" => $serializer->normalize($e->getViolations(), 'json')
+                "violations" => $normalizer->normalize($e->getViolations(), 'json')
             ];
-            if (isset($groupDTO->path)) {
-                $return["directory"] = $groupDTO->path;
+            if (isset($mediaDTO->path)) {
+                $return["directory"] = $mediaDTO->path;
             }
             return new JsonResponse($return, 422);
         } catch (\Exception $e) {
@@ -53,8 +52,8 @@ class MediaCreateController extends AbstractController
                     "code" => 422,
                     "violations" => $e->getMessage()
                 ];
-                if (isset($groupDTO->path)) {
-                    $return["directory"] = $groupDTO->path;
+                if (isset($mediaDTO->path)) {
+                    $return["directory"] = $mediaDTO->path;
                 }
                 return new JsonResponse($return, 422);
             } else {

@@ -18,4 +18,29 @@ namespace App\Services\Encryptor;
  */
 interface EncryptorInterface
 {
+    /**
+     * Generate keys for a user
+     */
+    function generateKeyPair(string $uuid, bool $force = false): void;
+
+    /**
+     * Load keys for a user and store it on attributes
+     */
+    function loadKeyPair(string $uuid): void;
+
+    /**
+     * Encrypt data
+     * Keys must be loaded
+     *
+     * @throws \Exception
+     */
+    function encryptData(string $data): string;
+
+    /**
+     * Decrypt data
+     * Keys must be loaded
+     *
+     * @throws \Exception
+     */
+    function decryptData(string $data): string;
 }

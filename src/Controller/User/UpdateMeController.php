@@ -11,16 +11,14 @@ declare(strict_types=1);
 
 namespace App\Controller\User;
 
-use App\Doctrine\Entity\User;
-use App\Doctrine\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Services\Security\SecurityServiceInterface;
+use App\Doctrine\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use App\Services\Security\SecurityServiceInterface;
 use App\Services\UserValidator\UserValidatorInterface;
-use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
@@ -33,13 +31,13 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class UpdateMeController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManagerInterface,
-        private UserRepository $userRepository,
-        private SerializerInterface $serializerInterface,
         private RequestStack $requestStack,
+        private UserRepository $userRepository,
+        private SecurityServiceInterface $security,
+        private NormalizerInterface $normalizerInterface,
         private UserPasswordHasherInterface $passwordHasher,
+        private EntityManagerInterface $entityManagerInterface,
         private UserValidatorInterface $userValidatorInterface,
-        private SecurityServiceInterface $security
     ) {
     }
 
@@ -70,6 +68,6 @@ class UpdateMeController extends AbstractController
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('read:user')->toArray();
 
-        return new JsonResponse($this->serializerInterface->normalize($user, 'json', $contextBuilder));
+        return new JsonResponse($this->normalizerInterface->normalize($user, 'json', $contextBuilder));
     }
 }

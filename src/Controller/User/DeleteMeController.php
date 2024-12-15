@@ -11,11 +11,10 @@ declare(strict_types=1);
 
 namespace App\Controller\User;
 
-use App\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Services\Security\SecurityServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -27,9 +26,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class DeleteMeController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManagerInterface,
         private ParameterBagInterface $bag,
-        private SecurityServiceInterface $security
+        private SecurityServiceInterface $security,
+        private EntityManagerInterface $entityManagerInterface,
     ) {
     }
 

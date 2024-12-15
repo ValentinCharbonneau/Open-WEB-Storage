@@ -19,8 +19,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Services\UserValidator\UserValidatorInterface;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use App\Services\UserJwtGenerator\UserJwtGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
@@ -33,12 +33,13 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class AuthenticatorRegisterController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManagerInterface,
-        private SerializerInterface $serializerInterface,
         private RequestStack $requestStack,
+        private NormalizerInterface $normalizerInterface,
+        private SerializerInterface $serializerInterface,
         private UserPasswordHasherInterface $passwordHasher,
         private UserValidatorInterface $userValidatorInterface,
-        private UserJwtGeneratorInterface $userJwtGeneratorInterface
+        private EntityManagerInterface $entityManagerInterface,
+        private UserJwtGeneratorInterface $userJwtGeneratorInterface,
     ) {
     }
 
@@ -69,6 +70,6 @@ class AuthenticatorRegisterController extends AbstractController
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('auth:jwt')->toArray();
 
-        return new JsonResponse($this->serializerInterface->normalize($authenticator, 'json', $contextBuilder), 201);
+        return new JsonResponse($this->normalizerInterface->normalize($authenticator, 'json', $contextBuilder), 201);
     }
 }

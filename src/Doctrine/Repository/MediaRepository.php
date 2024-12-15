@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace App\Doctrine\Repository;
 
+use App\Doctrine\Entity\User;
 use App\Doctrine\Entity\Group;
 use App\Doctrine\Entity\Media;
 use App\DTO\EntityDecrypt\MediaDecrypt;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Services\Encryptor\EncryptorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use App\Doctrine\Entity\User;
 
 /**
  * @method Media|null find($id, $lockMode = null, $lockVersion = null)
@@ -90,7 +90,7 @@ class MediaRepository extends ServiceEntityRepository
 
         $result = $query->getQuery()->getResult();
 
-        if (count($result) > 0) {
+        if (!empty($result)) {
             return $result[0];
         } else {
             return null;

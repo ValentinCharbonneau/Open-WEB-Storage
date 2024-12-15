@@ -18,4 +18,10 @@ namespace App\Services\Documentation;
  */
 interface DocumentationInterface
 {
+    /**
+     * Build an associative array corresponding to the API documentation
+     *
+     * @return array
+     */
+    public function build(): array;
 }

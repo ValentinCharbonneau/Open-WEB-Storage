@@ -17,6 +17,7 @@ use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
@@ -25,20 +26,21 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class GroupCreateController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
+        RequestStack $requestStack,
+        GEDServiceInterface $gedService,
         SerializerInterface $serializer,
-        RequestStack $requestStack
+        NormalizerInterface $normalizer,
     ) {
         $inputContext = (new ObjectNormalizerContextBuilder())->withGroups(['write:group']);
         $groupDTO = $serializer->deserialize($requestStack->getCurrentRequest()->getContent(), GroupDTO::class, 'json', $inputContext->toArray());
 
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:group']);
-            return new JsonResponse($serializer->normalize($GEDService->createGroup($groupDTO), 'json', $outputContext->toArray()), 201);
+            return new JsonResponse($normalizer->normalize($gedService->createGroup($groupDTO), 'json', $outputContext->toArray()), 201);
         } catch (ValidationFailedException $e) {
             $return = [
                 "code" => 422,
-                "violations" => $serializer->normalize($e->getViolations(), 'json')
+                "violations" => $normalizer->normalize($e->getViolations(), 'json')
             ];
             if (isset($groupDTO->path)) {
                 $return["directory"] = $groupDTO->path;

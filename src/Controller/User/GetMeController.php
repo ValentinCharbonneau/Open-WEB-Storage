@@ -11,12 +11,10 @@ declare(strict_types=1);
 
 namespace App\Controller\User;
 
-use App\Doctrine\Entity\User;
-use App\Services\Security\SecurityServiceInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\HttpKernel\Attribute\AsController;
+use App\Services\Security\SecurityServiceInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
@@ -28,8 +26,8 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class GetMeController extends AbstractController
 {
     public function __construct(
-        private SerializerInterface $serializerInterface,
-        private SecurityServiceInterface $security
+        private SecurityServiceInterface $security,
+        private NormalizerInterface $normalizerInterface,
     ) {
     }
 
@@ -40,6 +38,6 @@ class GetMeController extends AbstractController
 
         $contextBuilder = (new ObjectNormalizerContextBuilder())->withGroups('read:user')->toArray();
 
-        return new JsonResponse($this->serializerInterface->normalize($user, 'json', $contextBuilder));
+        return new JsonResponse($this->normalizerInterface->normalize($user, 'json', $contextBuilder));
     }
 }
