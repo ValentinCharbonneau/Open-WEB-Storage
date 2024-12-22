@@ -18,6 +18,19 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 #[AsCommand(name: 'ows:build-tree')]
 class BuildTreeCommand extends Command
 {
+    private const BEGIN_ERROR_FOLDER = "<error>Folder ";
+    private const END_ERROR_NOT_WRITABLE = " is not writable</error>";
+    private const END_ERROR_NOT_FOUND = " not found</error>";
+
+    private string $dirParent;
+    private string $fileParent;
+    private string $archParent;
+    private string $keyParent;
+    private string $dir;
+    private string $file;
+    private string $arch;
+    private string $key;
+
     protected function configure(): void
     {
         $this->setHelp('This command build tree to store documents and archives.');
@@ -48,74 +61,100 @@ class BuildTreeCommand extends Command
             return Command::FAILURE;
         }
 
-        $dir = preg_replace('/\\\\/i', "/", $this->bag->get("ged_dir"));
-        $file = preg_replace('/\\\\/i', "/", $this->bag->get("archive_dir"));
-        $arch = preg_replace('/\\\\/i', "/", $this->bag->get("doc_dir"));
-        $key = preg_replace('/\\\\/i', "/", $this->bag->get("key_dir"));
+        $this->dir = str_replace("\\\\", "/", $this->bag->get("ged_dir"));
+        $this->file = str_replace("\\\\", "/", $this->bag->get("archive_dir"));
+        $this->arch = str_replace("\\\\", "/", $this->bag->get("doc_dir"));
+        $this->key = str_replace("\\\\", "/", $this->bag->get("key_dir"));
 
-        $dirParent = explode("/", $dir);
-        array_pop($dirParent);
-        $dirParent = implode("/", $dirParent);
-        $fileParent = explode("/", $file);
-        array_pop($fileParent);
-        $fileParent = implode("/", $fileParent);
-        $archParent = explode("/", $arch);
-        array_pop($archParent);
-        $archParent = implode("/", $archParent);
-        $keyParent = explode("/", $key);
-        array_pop($keyParent);
-        $keyParent = implode("/", $keyParent);
+        $arrayDirParent = explode("/", $this->dir);
+        array_pop($arrayDirParent);
+        $this->dirParent = implode("/", $arrayDirParent);
+        $arrayFileParent = explode("/", $this->file);
+        array_pop($arrayFileParent);
+        $this->fileParent = implode("/", $arrayFileParent);
+        $arrayArchParent = explode("/", $this->arch);
+        array_pop($arrayArchParent);
+        $this->archParent = implode("/", $arrayArchParent);
+        $arrayKeyParent = explode("/", $this->key);
+        array_pop($arrayKeyParent);
+        $this->keyParent = implode("/", $arrayKeyParent);
 
-        if (!file_exists($dirParent)) {
-            $output->writeln('<error>Folder ' . $dirParent . ' not found</error>');
-            return Command::FAILURE;
-        }
-        if (!is_writable($dirParent)) {
-            $output->writeln('<error>Folder ' . $dirParent . ' is not writable</error>');
-            return Command::FAILURE;
-        }
-        if (!file_exists($dir)) {
-            mkdir($dir, 0550);
-        }
+        return $this->verification($output);
+    }
 
-        if (!file_exists($fileParent)) {
-            $output->writeln('<error>Folder ' . $fileParent . ' not found</error>');
-            return Command::FAILURE;
-        }
-        if (!is_writable($fileParent)) {
-            $output->writeln('<error>Folder ' . $fileParent . ' is not writable</error>');
-            return Command::FAILURE;
-        }
-        if (!file_exists($file)) {
-            mkdir($file, 0550);
+    private function verification(OutputInterface $output): int
+    {
+        $result = Command::SUCCESS;
+
+        $this->verifyDir($output, $result);
+        $this->verifyFile($output, $result);
+        $this->verifyArch($output, $result);
+        $this->verifyKey($output, $result);
+
+        if ($result == Command::SUCCESS) {
+            $output->writeln('<info>Success</info>');
         }
 
-        if (!file_exists($archParent)) {
-            $output->writeln('<error>Folder ' . $archParent . ' not found</error>');
-            return Command::FAILURE;
-        }
-        if (!is_writable($archParent)) {
-            $output->writeln('<error>Folder ' . $archParent . ' is not writable</error>');
-            return Command::FAILURE;
-        }
-        if (!file_exists($arch)) {
-            mkdir($arch, 0550);
-        }
+        return $result;
+    }
 
-        if (!file_exists($keyParent)) {
-            $output->writeln('<error>Folder ' . $keyParent . ' not found</error>');
-            return Command::FAILURE;
+    private function verifyDir(OutputInterface $output, int &$currentResult): void
+    {
+        if (!file_exists($this->dirParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->dirParent . BuildTreeCommand::END_ERROR_NOT_FOUND);
+            $currentResult = Command::FAILURE;
         }
-        if (!is_writable($keyParent)) {
-            $output->writeln('<error>Folder ' . $keyParent . ' is not writable</error>');
-            return Command::FAILURE;
+        if (!is_writable($this->dirParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->dirParent . BuildTreeCommand::END_ERROR_NOT_WRITABLE);
+            $currentResult = Command::FAILURE;
         }
-        if (!file_exists($key)) {
-            mkdir($key, 0550);
+        if (!file_exists($this->dir) && $currentResult == Command::SUCCESS) {
+            mkdir($this->dir, 0550);
         }
+    }
 
-        $output->writeln('<info>Success</info>');
+    private function verifyFile(OutputInterface $output, int &$currentResult): void
+    {
+        if (!file_exists($this->fileParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->fileParent . BuildTreeCommand::END_ERROR_NOT_FOUND);
+            $currentResult = Command::FAILURE;
+        }
+        if (!is_writable($this->fileParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->fileParent . BuildTreeCommand::END_ERROR_NOT_WRITABLE);
+            $currentResult = Command::FAILURE;
+        }
+        if (!file_exists($this->file) && $currentResult == Command::SUCCESS) {
+            mkdir($this->file, 0550);
+        }
+    }
 
-        return Command::SUCCESS;
+    private function verifyArch(OutputInterface $output, int &$currentResult): void
+    {
+        if (!file_exists($this->archParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->archParent . BuildTreeCommand::END_ERROR_NOT_FOUND);
+            $currentResult = Command::FAILURE;
+        }
+        if (!is_writable($this->archParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->archParent . BuildTreeCommand::END_ERROR_NOT_WRITABLE);
+            $currentResult = Command::FAILURE;
+        }
+        if (!file_exists($this->arch) && $currentResult == Command::SUCCESS) {
+            mkdir($this->arch, 0550);
+        }
+    }
+
+    private function verifyKey(OutputInterface $output, int &$currentResult): void
+    {
+        if (!file_exists($this->keyParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->keyParent . BuildTreeCommand::END_ERROR_NOT_FOUND);
+            $currentResult = Command::FAILURE;
+        }
+        if (!is_writable($this->keyParent)) {
+            $output->writeln(BuildTreeCommand::BEGIN_ERROR_FOLDER . $this->keyParent . BuildTreeCommand::END_ERROR_NOT_WRITABLE);
+            $currentResult = Command::FAILURE;
+        }
+        if (!file_exists($this->key) && $currentResult == Command::SUCCESS) {
+            mkdir($this->key, 0550);
+        }
     }
 }
