@@ -1,4 +1,4 @@
-# Open WEB Storage v1.0.3
+# Open WEB Storage v1.0.4
 Open WEB Storage is an open source project to store and encrypt your documents.
 
 ## Prerequisites
