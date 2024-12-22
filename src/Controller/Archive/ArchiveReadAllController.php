@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
@@ -23,8 +23,8 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class ArchiveReadAllController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        SerializerInterface $serializer,
+        GEDServiceInterface $gedService,
+        NormalizerInterface $normalizer,
         RequestStack $requestStack,
     ) {
         if (!empty($requestStack->getCurrentRequest()->query->get("page"))) {
@@ -41,9 +41,9 @@ class ArchiveReadAllController extends AbstractController
         }
 
         $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:archive']);
-        $result = $GEDService->readAllArchive($page);
+        $result = $gedService->readAllArchive($page);
         foreach ($result as &$archive) {
-            $archive = $serializer->normalize($archive, 'json', $outputContext->toArray());
+            $archive = $normalizer->normalize($archive, 'json', $outputContext->toArray());
         }
 
         return new JsonResponse($result);

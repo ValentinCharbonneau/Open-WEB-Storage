@@ -15,7 +15,7 @@ use App\DTO\EntityDTO\ArchiveDTO;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
@@ -24,17 +24,17 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class ArchiveReadbase64Controller extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        SerializerInterface $serializer,
+        GEDServiceInterface $gedService,
+        NormalizerInterface $normalizer,
         string $uuid
     ) {
         try {
-            $content = $GEDService->readBase64Archive($uuid);
+            $content = $gedService->readBase64Archive($uuid);
             $archiveDTO = new ArchiveDTO();
             $archiveDTO->content = $content;
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['file:archive']);
-            return new JsonResponse($serializer->normalize($archiveDTO, 'json', $outputContext->toArray()));
-        } catch (ResourceNotFoundException $e) {
+            return new JsonResponse($normalizer->normalize($archiveDTO, 'json', $outputContext->toArray()));
+        } catch (ResourceNotFoundException $_) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }
     }

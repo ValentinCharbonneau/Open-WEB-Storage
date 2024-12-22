@@ -14,7 +14,7 @@ namespace App\Controller\Archive;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
@@ -23,14 +23,14 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class ArchiveReadController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        SerializerInterface $serializer,
+        GEDServiceInterface $gedService,
+        NormalizerInterface $normalizer,
         string $uuid
     ) {
         try {
             $outputContext = (new ObjectNormalizerContextBuilder())->withGroups(['read:archive']);
-            return new JsonResponse($serializer->normalize($GEDService->readArchive($uuid), 'json', $outputContext->toArray()));
-        } catch (ResourceNotFoundException $e) {
+            return new JsonResponse($normalizer->normalize($gedService->readArchive($uuid), 'json', $outputContext->toArray()));
+        } catch (ResourceNotFoundException $_) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
         }
     }
