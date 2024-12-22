@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace App\Controller\Archive;
 
 use Symfony\Component\Routing\Annotation\Route;
-use App\Services\FileSystem\FileSystemInterface;
 use App\Services\GEDService\GEDServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,12 +21,11 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class ArchiveDeleteController extends AbstractController
 {
     public function __invoke(
-        GEDServiceInterface $GEDService,
-        FileSystemInterface $fileSystem,
+        GEDServiceInterface $gedService,
         string $uuid
     ) {
         try {
-            $GEDService->deleteArchive($uuid);
+            $gedService->deleteArchive($uuid);
             return new JsonResponse(["code" => 204, "message" => "Resource was removed"], 204);
         } catch (ResourceNotFoundException $e) {
             return new JsonResponse(["code" => 404, "message" => "Resource '$uuid' not found."], 404);
