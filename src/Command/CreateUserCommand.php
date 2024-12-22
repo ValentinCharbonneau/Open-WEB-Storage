@@ -24,6 +24,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 #[AsCommand(name: 'ows:create-user')]
 class CreateUserCommand extends Command
 {
+    private const BEGIN_ERROR = "<error>";
+    private const END_ERROR = "</error>";
+
     protected function configure(): void
     {
         $this->setHelp('This command create a user.');
@@ -79,13 +82,13 @@ class CreateUserCommand extends Command
                 foreach ($violations as $violation) {
                     if ($violation->getCode() == "23bd9dbf-6b9b-41cd-a99e-4844bcf3077f") {
                         $validEmail = false;
-                        $output->writeln('<error>Email : ' . $violation->getMessage() . '</error>');
+                        $output->writeln(CreateUserCommand::BEGIN_ERROR .'Email : ' . $violation->getMessage() . CreateUserCommand::END_ERROR);
                         break;
                     }
                 }
             } else {
                 foreach ($violations as $violation) {
-                    $output->writeln('<error>Email : ' . $violation->getMessage() . '</error>');
+                    $output->writeln(CreateUserCommand::BEGIN_ERROR .'Email : ' . $violation->getMessage() . CreateUserCommand::END_ERROR);
                 }
             }
         }
@@ -106,7 +109,7 @@ class CreateUserCommand extends Command
                 $pwdEmail = true;
             } else {
                 foreach ($violations as $violation) {
-                    $output->writeln('<error>Password : ' . $violation->getMessage() . '</error>');
+                    $output->writeln(CreateUserCommand::BEGIN_ERROR .'Password : ' . $violation->getMessage() . CreateUserCommand::END_ERROR);
                 }
             }
         }
