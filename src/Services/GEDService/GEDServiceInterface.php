@@ -36,4 +36,12 @@ interface GEDServiceInterface
     function readAllMedia(int $page = 1): array;
 
     function readBase64Media(string $uuid): string;
+
+    function deleteArchive(string $uuid): void;
+
+    function readArchive(string $uuid): ArchiveDTO;
+
+    function readAllArchive(int $page = 1): array;
+
+    function readBase64Archive(string $uuid): string;
 }

@@ -306,7 +306,6 @@ class GEDService implements GEDServiceInterface
         return $mediaDTO->content;
     }
 
-
     ### Archive ###
     public function deleteArchive(string $uuid): void
     {
