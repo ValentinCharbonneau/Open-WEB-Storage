@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -40,8 +41,33 @@ class CreateUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $user = new User();
+
+        /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
+        $this->emailQuestion($user, $helper, $input, $output);
+
+        $this->passwordQuestion($user, $helper, $input, $output);
+
+        $adminQuestion = new Question('This user is admin ? [false] ', false);
+        $admin = strtolower($helper->ask($input, $output, $adminQuestion));
+
+        if ($admin == "true" || $admin == "yes") {
+            $user->setRoles(['ROLE_ADMIN']);
+        } else {
+            $user->setRoles([]);
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $output->writeln('<info>User ' . $user->getEmail() . ' has been successfully created</info>');
+
+        return Command::SUCCESS;
+    }
+
+    private function emailQuestion(User &$user, QuestionHelper $helper, InputInterface $input, OutputInterface $output): void
+    {
         $emailQuestion = new Question('Enter email of new user [toto@ows.fr] : ', 'toto@ows.fr');
         $validEmail = false;
         while (!$validEmail) {
@@ -63,7 +89,10 @@ class CreateUserCommand extends Command
                 }
             }
         }
+    }
 
+    private function passwordQuestion(User &$user, QuestionHelper $helper, InputInterface $input, OutputInterface $output): void
+    {
         $pwdQuestion = new Question('Enter password of new user [P@ss0rd_] : ', 'P@ss0rd_');
         $pwdEmail = false;
         while (!$pwdEmail) {
@@ -81,21 +110,5 @@ class CreateUserCommand extends Command
                 }
             }
         }
-
-        $adminQuestion = new Question('This user is admin ? [false] ', false);
-        $admin = strtolower($helper->ask($input, $output, $adminQuestion));
-
-        if ($admin == "true" || $admin == "yes") {
-            $user->setRoles(['ROLE_ADMIN']);
-        } else {
-            $user->setRoles([]);
-        }
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        $output->writeln('<info>User ' . $user->getEmail() . ' has been successfully created</info>');
-
-        return Command::SUCCESS;
     }
 }
